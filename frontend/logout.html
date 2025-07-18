@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logout - Confirmation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #f4f6f8;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      height: 100vh;
+      overflow-y: auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin: 12px 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.2s, padding-left 0.2s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.15);
+      padding-left: 16px;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: calc(100% - 230px);
+    }
+
+    .logout-box {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .logout-box h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .logout-box p {
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .logout-box button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+
+    .logout-btn {
+      background-color: #e53935;
+      color: white;
+    }
+
+    .cancel-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    .logout-box button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar (Do not modify) -->
+  <div class="sidebar" id="sidebar">
+    <h2 id="storeTitle">Your Store</h2>
+    <ul>
+      <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+      <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
+      <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
+      <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+      <li><a href="content.html"><i class="fas fa-file-alt"></i> Content</a></li>
+      <li><a href="marketing.html"><i class="fas fa-bullhorn"></i> Marketing</a></li>
+      <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+      <li><a href="discounts.html"><i class="fas fa-tags"></i> Discounts</a></li>
+      <li><a href="sales-channels.html"><i class="fas fa-store"></i> Sales Channels</a></li>
+    </ul>
+    <ul style="margin-top: 30px;">
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="logout.html" class="active"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Logout Main Area -->
+  <div class="main-content">
+    <div class="logout-box">
+      <h1>Are you sure you want to logout?</h1>
+      <p>You will need to login again to access your store dashboard.</p>
+      <button class="logout-btn" onclick="logoutUser()">Yes, Logout</button>
+      <button class="cancel-btn" onclick="window.location.href='home.html'">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const store = localStorage.getItem("store_name");
+    const storeTitle = document.getElementById("storeTitle");
+    if (store && storeTitle) {
+      storeTitle.textContent = `${store} Store`;
+    }
+
+    function logoutUser() {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

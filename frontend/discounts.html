@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discounts | Shopify Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin: 12px 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.2s, padding-left 0.2s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.15);
+      padding-left: 16px;
+    }
+
+    .main {
+      margin-left: 230px;
+      padding: 30px;
+      width: calc(100% - 230px);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .add-btn {
+      background: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .add-btn:hover {
+      background: #1e40af;
+    }
+
+    .search {
+      margin-bottom: 20px;
+    }
+
+    .search input {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+
+    .discount-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .discount-table th, .discount-table td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .discount-table th {
+      background: #f9fafb;
+      font-weight: 600;
+    }
+
+    .status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .expired {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <h2 id="storeTitle">Your Store</h2>
+    <ul>
+      <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+      <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
+      <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
+      <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+      <li><a href="content.html"><i class="fas fa-file-alt"></i> Content</a></li>
+      <li><a href="marketing.html"><i class="fas fa-bullhorn"></i> Marketing</a></li>
+       <li><a href="themes.html"><i class="fas fa-palette"></i> Store Themes</a></li>
+      <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+      <li><a href="discounts.html" class="active"><i class="fas fa-tags"></i> Discounts</a></li>
+      <li><a href="sales-channels.html"><i class="fas fa-store"></i> Sales Channels</a></li>
+    </ul>
+    <ul style="margin-top: 30px;">
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>Discounts</h1>
+      <button class="add-btn" onclick="alert('Redirect to discount creation page...')">
+        <i class="fas fa-plus"></i> Create Discount
+      </button>
+    </div>
+
+    <div class="search">
+      <input type="text" placeholder="Search discounts..." id="searchInput" onkeyup="filterDiscounts()" />
+    </div>
+
+    <table class="discount-table" id="discountTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Value</th>
+          <th>Status</th>
+          <th>Ends</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SUMMER10</td>
+          <td>Percentage</td>
+          <td>10%</td>
+          <td><span class="status active">Active</span></td>
+          <td>July 31, 2025</td>
+        </tr>
+        <tr>
+          <td>WELCOME50</td>
+          <td>Fixed Amount</td>
+          <td>$50</td>
+          <td><span class="status expired">Expired</span></td>
+          <td>May 30, 2025</td>
+        </tr>
+        <tr>
+          <td>FREESHIP</td>
+          <td>Free Shipping</td>
+          <td>—</td>
+          <td><span class="status active">Active</span></td>
+          <td>August 15, 2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const store = localStorage.getItem("store_name");
+    const storeTitle = document.getElementById("storeTitle");
+    if (store && storeTitle) storeTitle.textContent = `${store} Store`;
+
+    function filterDiscounts() {
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      document.querySelectorAll("#discountTable tbody tr").forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? "" : "none";
+      });
+    }
+  </script>
+</body>
+</html>

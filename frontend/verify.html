@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verify OTP – Z-Stores</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #b2d2b8, #89d1dc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #f0f3f0;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: url("https://via.placeholder.com/60x60?text=Z") center/cover no-repeat;
+      display: inline-block;
+    }
+    h2 {
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: 600;
+    }
+    .quote {
+      font-size: 13px;
+      color: #e80a0a;
+      margin: 15px 0;
+      font-style: italic;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #message {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    #message.success {
+      color: green;
+    }
+    #message.error {
+      color: red;
+    }
+    .review {
+      font-size: 12px;
+      color: #888;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"></div>
+    <h2>Enter OTP</h2>
+    <form id="otpForm">
+      <div class="quote">"Every brand starts with a bold step."</div>
+      <p>Please enter the 6-digit code sent to your email.</p>  
+      <input type="text" id="otp" maxlength="6" placeholder="Enter the 6-digit code" required />
+      <button type="submit">Verify</button>
+  
+      <div class="review">⭐️⭐️⭐️⭐️ – "Easy to use and reliable!"</div>
+      <div id="message"></div>
+    </form>
+  </div>
+
+  <script>
+ document.getElementById("otpForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const otp = document.getElementById("otp").value.trim();
+      const email = localStorage.getItem("reset_email");
+      const message = document.getElementById("message");
+
+      if (!otp || !email) {
+        message.textContent = "❌ OTP or email missing.";
+        message.className = "error";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:5000/api/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp }),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          message.textContent = "✅ OTP verified. Redirecting...";
+          message.className = "success";
+          setTimeout(() => {
+            window.location.href = "reset-password.html";
+          }, 500);
+        } else {
+          message.textContent = "❌ Invalid or expired OTP.";
+          message.className = "error";
+        }
+      } catch (err) {
+        message.textContent = "❌ " + err.message;
+        message.className = "error";
+      }
+    });
+  </script>
+</body>
+</html>

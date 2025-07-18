@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login – Z-Stores</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #b2d2b8, #89d1dc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #f0f3f0;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: url("https://via.placeholder.com/60x60?text=Z") center/cover no-repeat;
+      display: inline-block;
+    }
+    h2 {
+      margin: 10px 0 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    .password-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .password-wrapper input {
+      width: 100%;
+      padding: 12px;
+      padding-right: 40px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .toggle-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 16px;
+      user-select: none;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .quote {
+      font-size: 13px;
+      color: #e80a0a;
+      margin-top: 25px;
+      font-style: italic;
+    }
+    .review {
+      font-size: 12px;
+      color: #888;
+      margin-top: 8px;
+    }
+    #message {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    #message.error {
+      color: red;
+    }
+    #message.success {
+      color: green;
+    }
+    .forgot-password {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 15px;
+    }
+    .forgot-password a {
+      font-size: 13px;
+      color: #007bff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"></div>
+    <h2>Welcome Back</h2>
+    <h2 class="quote">"Consistency beats talent when talent doesn't work hard."</h2>
+
+    <!-- ✅ Login Form -->
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Password" required />
+        <span class="toggle-eye" onclick="togglePassword()">👁️</span>
+      </div>
+      <div class="forgot-password">
+        <a href="forgot-password.html">Forgot Password?</a>
+      </div>
+      <button type="submit">Login</button>
+      <div id="message"></div>
+    </form>
+
+    <div class="review">⭐️⭐️⭐️⭐️⭐️ – "Login was instant and easy. Love it!"</div>
+  </div>
+
+  <script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const message = document.getElementById("message");
+
+      if (!email || !password) {
+        message.textContent = "❌ Email and password required.";
+        message.className = "error";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:5000/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+        if (data.token) {
+          message.textContent = "✅ Login successful! Redirecting...";
+          message.className = "success";
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("full_name", data.name || "User");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 500);
+        } else {
+          message.textContent = "❌ " + (data.error || "Login failed.");
+          message.className = "error";
+        }
+      } catch (err) {
+        message.textContent = "❌ " + err.message;
+        message.className = "error";
+      }
+    });
+
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>
+
+    

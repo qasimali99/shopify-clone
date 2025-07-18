@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Collection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f7f9fb;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2, h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .preview img, .preview video {
+      max-width: 120px;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .search-section {
+      margin-top: 30px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 10px;
+    }
+    .browse-results {
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      background: #f1f1f1;
+    }
+    .browse-item {
+      padding: 8px;
+      background: #fff;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .browse-item:hover {
+      background-color: #e9f3ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create Collection</h2>
+
+    <form id="collectionForm">
+      <div class="form-group">
+        <label>Collection Title</label>
+        <input type="text" name="title" required />
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea name="description" rows="4"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status" id="status">
+          <option value="active">Active</option>
+          <option value="draft">Draft</option>
+        </select>
+      </div>
+    </form>
+
+    <!-- Product Search / Browse Section -->
+    <div class="search-section">
+      <h3>Browse Existing Products</h3>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search for a product..." />
+      </div>
+      <div class="browse-results" id="browseResults">
+        <div class="browse-item">Product A <button type="button" onclick="selectProduct('Product A')">Select</button></div>
+        <div class="browse-item">Product B <button type="button" onclick="selectProduct('Product B')">Select</button></div>
+        <div class="browse-item">Product C <button type="button" onclick="selectProduct('Product C')">Select</button></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Selected Products:</label>
+      <div id="selectedProducts" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+    </div>
+
+    <!-- SEO Preview Section -->
+    <div class="form-group" style="margin-top: 30px;">
+      <label><strong>Search engine listing preview</strong></label>
+      <div style="background: #f9fafb; padding: 15px; border: 1px solid #ccc; border-radius: 6px;">
+        <p style="color: #1a0dab; font-size: 16px;" id="previewTitle">Your product title here</p>
+        <p style="color: #006621;" id="previewURL">yourstore.com/products/your-product</p>
+        <p style="color: #545454;" id="previewDesc">Write a short description for this product...</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Page title</label>
+      <input type="text" id="metaTitle" name="metaTitle" maxlength="70" placeholder="Page title for search engines" />
+    </div>
+
+    <div class="form-group">
+      <label>Meta description</label>
+      <textarea id="metaDesc" name="metaDesc" rows="3" maxlength="160" placeholder="Description for search engine result..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>URL handle</label>
+      <input type="text" id="urlHandle" name="urlHandle" placeholder="e.g. your-product-title" />
+    </div>
+
+    <!-- Save Button -->
+    <div class="form-group" style="margin-top: 30px; text-align: center;">
+      <button type="button" onclick="saveCollection()">Save Collection</button>
+    </div>
+  </div>
+
+  <script>
+    const selectedSet = new Set();
+
+    function selectProduct(name) {
+      if (selectedSet.has(name)) return;
+
+      selectedSet.add(name);
+      const container = document.getElementById("selectedProducts");
+      const tag = document.createElement("div");
+      tag.textContent = name;
+      tag.style.cssText = "background:#e0f0ff; padding:6px 10px; border-radius:20px; display:flex; align-items:center; gap:6px;";
+
+      const removeBtn = document.createElement("span");
+      removeBtn.textContent = "×";
+      removeBtn.style.cssText = "cursor:pointer; color:#007bff; font-weight:bold;";
+      removeBtn.onclick = () => {
+        selectedSet.delete(name);
+        tag.remove();
+      };
+
+      tag.appendChild(removeBtn);
+      container.appendChild(tag);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const filter = this.value.toLowerCase();
+      const items = document.querySelectorAll('.browse-item');
+      items.forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(filter) ? 'flex' : 'none';
+      });
+    });
+
+    document.querySelector('input[name="title"]').addEventListener("input", function () {
+      const val = this.value.trim();
+      document.getElementById("previewTitle").textContent = val || "Your product title here";
+      document.getElementById("urlHandle").value = val.toLowerCase().replace(/\s+/g, '-');
+      document.getElementById("previewURL").textContent = `yourstore.com/products/${document.getElementById("urlHandle").value}`;
+    });
+
+    document.getElementById("metaTitle").addEventListener("input", function () {
+      document.getElementById("previewTitle").textContent = this.value || "Your product title here";
+    });
+
+    document.getElementById("metaDesc").addEventListener("input", function () {
+      document.getElementById("previewDesc").textContent = this.value || "Write a short description for this product...";
+    });
+
+    document.getElementById("urlHandle").addEventListener("input", function () {
+      document.getElementById("previewURL").textContent = `yourstore.com/products/${this.value}`;
+    });
+
+    function saveCollection() {
+      // Simulate save and redirect
+      window.location.href = "collections.html";
+    }
+
+    // Auto-fill from dummy collection data if ID is in URL
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const collectionId = urlParams.get("id");
+
+      if (collectionId) {
+        const dummyData = {
+          collection123: {
+            title: "Summer Sale",
+            description: "Seasonal discounts on summer products.",
+            metaTitle: "Summer Sale Collection",
+            metaDesc: "Save big on summer styles!",
+            urlHandle: "summer-sale",
+            products: ["Product A", "Product B"],
+            status: "active"
+          }
+        };
+
+        const data = dummyData[collectionId];
+        if (data) {
+          document.querySelector('input[name="title"]').value = data.title;
+          document.querySelector('textarea[name="description"]').value = data.description;
+          document.getElementById("metaTitle").value = data.metaTitle;
+          document.getElementById("metaDesc").value = data.metaDesc;
+          document.getElementById("urlHandle").value = data.urlHandle;
+          document.getElementById("status").value = data.status;
+
+          document.getElementById("metaTitle").dispatchEvent(new Event("input"));
+          document.getElementById("metaDesc").dispatchEvent(new Event("input"));
+          document.getElementById("urlHandle").dispatchEvent(new Event("input"));
+
+          const items = document.querySelectorAll(".browse-item");
+          items.forEach(item => {
+            const name = item.textContent.trim();
+            if (data.products.includes(name)) {
+              item.style.background = "#d0ebff";
+              selectProduct(name);
+            }
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>

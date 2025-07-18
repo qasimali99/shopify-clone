@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup – Step 1 (Email)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #b2d2b8, #89d1dc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #f0f3f0;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: url("https://via.placeholder.com/60x60?text=Z") center/cover no-repeat;
+      display: inline-block;
+    }
+    h2 {
+      margin: 10px 0 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .quote {
+      font-size: 13px;
+      color: #e80a0a;
+      margin-top: 25px;
+      font-style: italic;
+    }
+    .review {
+      font-size: 12px;
+      color: #888;
+      margin-top: 8px;
+    }
+    #message {
+      margin-top: 12px;
+      color: green;
+      font-size: 14px;
+    }
+    #message.error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"></div>
+    <h2>Welcome to Z-Stores</h2>
+    <h2 class="quote">"Every brand starts with a bold step."</h2>
+    <form id="emailForm">
+      <input type="email" id="email" placeholder="Enter your email" required />
+      <button type="submit">Sign Up</button>
+      <div id="message"></div>
+    </form>
+    <div class="review"> Rated 4.9/5 by our users</div>
+    <div class="review">⭐️⭐️⭐️⭐️⭐️ – Trusted by 10,000+ merchants</div>
+    <h2 class="quote">"Our "Valued Customers" say below About us!"</h2>
+    <div class="review">⭐️⭐️⭐️⭐️⭐️ – "The best e-commerce platform!"</div>
+    <div class="review">⭐️⭐️⭐️⭐️⭐️ – "A game-changer for my business!"</div>
+    <div class="review">⭐️⭐️⭐️⭐️⭐️ – "Highly recommend for startups!"</div>
+    <div class="review">⭐️⭐️⭐️⭐️⭐️ – "Exceptional support and features!"</div>
+  </div>
+<script>
+  // File: frontend/signup.js
+  document.getElementById("emailForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message");
+
+    if (!email) {
+      message.textContent = "❌ Please enter a valid email.";
+      message.className = "error";
+      return;
+    }
+
+    try {
+      // Step 1: Check if email is already registered
+      const check = await fetch("http://localhost:5000/api/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
+      const result = await check.json();
+      if (result.exists) {
+        message.textContent = "⚠️ Email already registered. Redirecting to login...";
+        message.className = "";
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 500);
+        return;
+      }
+
+      // Step 2: If not registered, send OTP
+      const res = await fetch("http://localhost:5000/api/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem("signup_email", email);
+        message.textContent = "✅ OTP sent! Redirecting...";
+        message.className = "";
+        setTimeout(() => {
+          window.location.href = "verify-sign.html";
+        }, 500);
+      } else {
+        message.textContent = "❌ " + (data.message || "Failed to send OTP.");
+        message.className = "error";
+      }
+
+    } catch (err) {
+      message.textContent = "❌ " + err.message;
+      message.className = "error";
+    }
+  });
+  </script>
+</body>
+</html>
+
+

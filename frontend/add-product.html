@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      padding: 20px;
+      background: #f5f7fb;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .row {
+      display: flex;
+      gap: 20px;
+    }
+    .row .form-group {
+      flex: 1;
+    }
+    .multi-select {
+      height: auto;
+    }
+    .image-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .image-preview img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .tag-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-height: 46px;
+      background: #fff;
+    }
+    .tag-input input {
+      border: none;
+      outline: none;
+      flex: 1;
+    }
+    .tag {
+      background: #007bff;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 14px;
+    }
+    /* CSS: styles.css */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.multi-select {
+  width: 180px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.color-row,
+.variant-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.add-btn {
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 38px;
+}
+
+.add-btn:hover {
+  background-color: #0056b3;
+}
+/* CSS: styles.css */
+#drop-area {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+  background: #fafafa;
+}
+#drop-area:hover {
+  background-color: #f0f8ff;
+}
+#mediaPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+#mediaPreview img,
+#mediaPreview video {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  position: relative;
+}
+.media-item {
+  position: relative;
+  display: inline-block;
+}
+.media-item button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: red;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
+#color-list,
+#variant-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background-color: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+    button {
+      padding: 10px 18px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .tag {
+  padding-right: 14px;
+  position: relative;
+}
+#size-list,
+#material-list,
+#color-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#size-list .tag,
+#material-list .tag,
+#color-list .tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+}
+  </style>
+</head>
+<body>
+  <h1>Edit Product</h1>
+  <form id="editProductForm">
+    <div class="form-group">
+      <label>Product Title</label>
+      <input type="text" placeholder="Enter product name" />
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea placeholder="Product description..."></textarea>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Original Price</label>
+        <input type="number" placeholder="e.g. 2500" />
+      </div>
+      <div class="form-group">
+        <label>Selling Price</label>
+        <input type="number" placeholder="e.g. 1999" />
+      </div>
+      <div class="form-group">
+        <label>Currency</label>
+        <select>
+          <option>PKR</option>
+          <option>USD</option>
+          <option>EUR</option>
+          <option>INR</option>
+          <option>AED</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Categories</label>
+      <select id="main-category">
+        <option value="">Select Category</option>
+        <option value="clothing">Clothing</option>
+        <option value="electronics">Electronics</option>
+        <option value="accessories">Accessories</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="subcategory-container" style="display:none;">
+      <label>Product Type</label>
+      <select id="subcategory"></select>
+    </div>
+<!-- HTML: edit-product.html -->
+<div class="form-group">
+  <label>Colors</label>
+  <div id="color-section">
+    <div class="color-row">
+      <select class="multi-select color-select">
+        <option value="">Select color</option>
+        <option>Black</option>
+        <option>White</option>
+        <option>Red</option>
+        <option>Blue</option>
+        <option>Green</option>
+        <option>Yellow</option>
+        <option>Pink</option>
+        <option>Purple</option>
+        <option>Orange</option>
+        <option>Grey</option>
+      </select>
+      <button type="button" class="add-btn" onclick="addColor()">Add Color</button>
+    </div>
+    <div id="color-list"></div>
+  </div>
+</div>
+<div class="form-group">
+  <label>Variants (Sizes)</label>
+  <div id="variant-section">
+    <div class="variant-row">
+      <select class="multi-select variant-select">
+        <option value="">Select size</option>
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+        <option>2XL</option>
+      </select>
+      <button type="button" class="add-btn" onclick="addSize()">Add Size</button>
+    </div>
+    <div id="size-list"></div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>Material</label>
+  <div class="variant-row">
+    <select class="multi-select material-select">
+      <option value="">Select material</option>
+      <option>Cotton</option>
+      <option>Mesh</option>
+      <option>Polyster</option>
+      <option>Dri-Fit</option>
+      <option>Fleece</option>
+    </select>
+    <button type="button" class="add-btn" onclick="addMaterial()">Add Material</button>
+  </div>
+  <div id="material-list"></div>
+</div>
+
+<div class="form-group">
+  <label for="mediaUpload">Upload Images & Videos</label>
+  <div id="drop-area">
+    <p>Drag & drop media here or click to upload</p>
+    <input type="file" id="mediaUpload" accept="image/*,video/*" multiple />
+  </div>
+  <div id="mediaPreview"></div>
+</div>
+
+    
+    <div class="form-group">
+      <label>Tags</label>
+      <div class="tag-input" id="tagInput">
+        <input type="text" id="tagTextBox" placeholder="Type and press enter...">
+      </div>
+    </div>
+    <!-- Inventory Section -->
+<div class="form-group">
+  <label><input type="checkbox" id="trackInventory"> Track Inventory</label>
+</div>
+
+<div id="inventoryDetails" style="display: none;">
+  <div class="form-group">
+    <label><input type="checkbox" id="allowOOS"> Continue selling when out of stock</label>
+  </div>
+
+  <div class="form-group">
+    <label>Inventory by Location</label>
+    <div id="inventoryTable">
+      <div class="row" style="margin-bottom:10px;">
+        <input type="text" placeholder="Location (e.g. Warehouse)" class="location-name" />
+        <input type="number" placeholder="Stock Quantity" class="location-qty" />
+        <button type="button" class="add-btn" onclick="addLocation()">Add</button>
+      </div>
+    </div>
+    <div id="locationList"></div>
+    <div class="form-group">
+  <label>Barcode</label>
+  <input type="text" placeholder="Enter barcode" />
+</div>
+<div class="form-group">
+  <label>SKU</label>
+  <input type="text" placeholder="Enter SKU" />
+</div>
+<div class="row">
+  <div class="form-group">
+    <label>Product Weight</label>
+    <input type="number" placeholder="e.g. 500" />
+  </div>
+  <div class="form-group">
+    <label>Unit</label>
+    <select>
+      <option>Grams</option>
+      <option>Kilograms</option>
+      <option>Milligrams</option>
+      <option>Liters</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label>Available Quantity</label>
+  <input type="number" placeholder="e.g. 120" />
+</div>
+<div class="form-group">
+  <label>On-Hand Quantity</label>
+  <input type="number" placeholder="e.g. 150" />
+</div>
+  </div>
+</div>
+
+     <button type="submit">Save Product</button>
+  </form>
+  <script>
+    const categoryMap = {
+      clothing: ["T-Shirts", "Hoodies", "Jackets", "Trousers"],
+      electronics: ["Mobiles", "Laptops", "Headphones"],
+      accessories: ["Watches", "Bags", "Belts"]
+    };
+
+    document.getElementById('main-category').addEventListener('change', function () {
+      const sub = document.getElementById('subcategory');
+      const container = document.getElementById('subcategory-container');
+      sub.innerHTML = '';
+      const selected = this.value;
+      if (categoryMap[selected]) {
+        container.style.display = 'block';
+        categoryMap[selected].forEach(item => {
+          const opt = document.createElement('option');
+          opt.textContent = item;
+          sub.appendChild(opt);
+        });
+      } else {
+        container.style.display = 'none';
+      }
+    });
+    // Tag system
+    const tagInput = document.getElementById('tagInput');
+    const tagTextBox = document.getElementById('tagTextBox');
+    tagTextBox.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = tagTextBox.value;
+        tagInput.insertBefore(tag, tagTextBox);
+        tagTextBox.value = '';
+      }
+    });
+// JS: script.js
+const dropArea = document.getElementById("drop-area");
+const input = document.getElementById("mediaUpload");
+const preview = document.getElementById("mediaPreview");
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("media-item");
+
+      let element;
+      if (file.type.startsWith("image")) {
+        element = document.createElement("img");
+        element.src = e.target.result;
+      } else if (file.type.startsWith("video")) {
+        element = document.createElement("video");
+        element.src = e.target.result;
+        element.controls = true;
+      }
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "×";
+      deleteBtn.onclick = () => wrapper.remove();
+
+      wrapper.appendChild(element);
+      wrapper.appendChild(deleteBtn);
+      preview.appendChild(wrapper);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+input.addEventListener("change", e => {
+  handleFiles(e.target.files);
+});
+
+dropArea.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropArea.classList.add("highlight");
+});
+
+dropArea.addEventListener("dragleave", () => {
+  dropArea.classList.remove("highlight");
+});
+
+dropArea.addEventListener("drop", e => {
+  e.preventDefault();
+  dropArea.classList.remove("highlight");
+  handleFiles(e.dataTransfer.files);
+});
+
+dropArea.addEventListener("click", () => {
+  input.click();
+});
+
+function addColor() {
+  const colorSelect = document.querySelector('.color-select');
+  const colorList = document.getElementById('color-list');
+  const selectedColor = colorSelect.value;
+
+  if (
+    selectedColor &&
+    !Array.from(colorList.children).some(el => el.dataset.value === selectedColor)
+  ) {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.dataset.value = selectedColor;
+    tag.textContent = selectedColor;
+
+    tag.style.backgroundColor = selectedColor.toLowerCase();
+    if (["white", "yellow", "pink"].includes(selectedColor.toLowerCase())) {
+      tag.style.color = "#000";
+      tag.style.border = "1px solid #ccc";
+    } else {
+      tag.style.color = "#fff";
+    }
+
+    // Create delete button
+    const delBtn = document.createElement('span');
+    delBtn.textContent = ' ×';
+    delBtn.style.cursor = 'pointer';
+    delBtn.style.marginLeft = '8px';
+    delBtn.style.fontWeight = 'bold';
+    delBtn.onclick = () => tag.remove();
+
+    tag.appendChild(delBtn);
+    colorList.appendChild(tag);
+  }
+}
+
+function addSize() {
+  const sizeSelect = document.querySelector('.variant-select');
+  const sizeList = document.getElementById('size-list');
+  const selectedSize = sizeSelect.value;
+
+  if (
+    selectedSize &&
+    !Array.from(sizeList.children).some(el => el.dataset.value === selectedSize)
+  ) {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.dataset.value = selectedSize;
+    tag.style.backgroundColor = '#007bff';
+    tag.style.color = '#fff';
+    tag.textContent = selectedSize;
+
+    const delBtn = document.createElement('span');
+    delBtn.textContent = ' ×';
+    delBtn.style.cursor = 'pointer';
+    delBtn.style.marginLeft = '8px';
+    delBtn.style.fontWeight = 'bold';
+    delBtn.onclick = () => tag.remove();
+
+    tag.appendChild(delBtn);
+    sizeList.appendChild(tag);
+  }
+}
+function addMaterial() {
+  const materialSelect = document.querySelector('.material-select');
+  const materialList = document.getElementById('material-list');
+  const selectedMaterial = materialSelect.value;
+
+  if (
+    selectedMaterial &&
+    !Array.from(materialList.children).some(el => el.dataset.value === selectedMaterial)
+  ) {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.dataset.value = selectedMaterial;
+    tag.style.backgroundColor = '#007bff';
+    tag.style.color = '#fff';
+    tag.textContent = selectedMaterial;
+
+    const delBtn = document.createElement('span');
+    delBtn.textContent = ' ×';
+    delBtn.style.cursor = 'pointer';
+    delBtn.style.marginLeft = '8px';
+    delBtn.style.fontWeight = 'bold';
+    delBtn.onclick = () => tag.remove();
+
+    tag.appendChild(delBtn);
+    materialList.appendChild(tag);
+  }
+}
+// Inventory toggle
+document.getElementById("trackInventory").addEventListener("change", function () {
+  document.getElementById("inventoryDetails").style.display = this.checked ? "block" : "none";
+});
+
+// Add custom location with quantity
+function addLocation() {
+  const name = document.querySelector(".location-name").value.trim();
+  const qty = document.querySelector(".location-qty").value.trim();
+  const locationList = document.getElementById("locationList");
+
+  if (name && qty && !isNaN(qty)) {
+    const entry = document.createElement("div");
+    entry.className = "tag";
+    entry.textContent = `${name} - ${qty} pcs`;
+
+    const delBtn = document.createElement("span");
+    delBtn.textContent = " ×";
+    delBtn.style.marginLeft = "10px";
+    delBtn.style.cursor = "pointer";
+    delBtn.onclick = () => entry.remove();
+
+    entry.appendChild(delBtn);
+    locationList.appendChild(entry);
+
+    // Clear input
+    document.querySelector(".location-name").value = "";
+    document.querySelector(".location-qty").value = "";
+  }
+}
+
+  document.getElementById("editProductForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    window.location.href = "products.html";
+  });
+</script>
+</body>
+</html>

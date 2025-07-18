@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #f4f6f8;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      height: 100vh;
+      overflow-y: auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin: 12px 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.2s, padding-left 0.2s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.15);
+      padding-left: 16px;
+    }
+
+    .main {
+      margin-left: 230px;
+      padding: 30px;
+      width: calc(100% - 230px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .topbar h1 {
+      font-size: 24px;
+    }
+
+    .form-container {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      max-width: 600px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin: 15px 0 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #2563eb;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <div class="topbar">
+      <h1>Edit Order</h1>
+    </div>
+
+    <a href="orders.html" class="back-link">← Back to Orders</a>
+
+    <div class="form-container">
+      <label for="orderId">Order ID</label>
+      <input type="text" id="orderId" value="ORD-001" disabled />
+
+      <label for="name">Customer Name</label>
+      <input type="text" id="name" value="Ali Khan" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" value="ali@email.com" />
+
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" value="0300-1234567" />
+
+      <label for="address">Address</label>
+      <textarea id="address">Lahore, Pakistan</textarea>
+
+      <label for="payment">Payment Status</label>
+      <select id="payment">
+        <option value="Paid">Paid</option>
+        <option value="Unpaid">Unpaid</option>
+        <option value="Refunded">Refunded</option>
+      </select>
+
+      <label for="delivery">Delivery Status</label>
+      <select id="delivery">
+        <option value="Delivered">Delivered</option>
+        <option value="Pending">Pending</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+
+      <label for="channel">Sales Channel</label>
+      <select id="channel">
+        <option value="Website">Website</option>
+        <option value="Instagram">Instagram</option>
+        <option value="Facebook">Facebook</option>
+      </select>
+<button id="saveChangesBtn">💾 Save Changes</button>
+    </div>
+  </div>
+
+   
+<script>
+  document.getElementById("saveChangesBtn").addEventListener("click", function () {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const address = document.getElementById("address").value;
+    const payment = document.getElementById("payment").value;
+    const delivery = document.getElementById("delivery").value;
+    const channel = document.getElementById("channel").value;
+
+    // ✅ You can add validation or saving logic here if needed
+
+    // ✅ This will redirect to orders.html without alerts
+    window.location.href = 'orders.html';
+  });
+
+  // Store name in top bar
+  const store = localStorage.getItem("store_name");
+  const storeTitle = document.getElementById("storeTitle");
+  if (store && storeTitle) {
+    storeTitle.textContent = `${store} Store`;
+  }
+</script>
+</body>
+</html>

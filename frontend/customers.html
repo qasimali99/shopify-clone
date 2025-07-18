@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customers</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f8;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 230px;
+      background-color: #1a73e8;
+      color: white;
+      padding: 20px;
+      height: 100vh;
+      position: fixed;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin: 12px 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.2s, padding-left 0.2s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255,255,255,0.15);
+      padding-left: 16px;
+    }
+
+    .main {
+      margin-left: 230px;
+      padding: 30px;
+      width: calc(100% - 230px);
+    }
+
+    .main h1 {
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f9fafb;
+      font-size: 14px;
+      color: #333;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .active {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .inactive {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2 id="storeTitle">Your Store</h2>
+    <ul class="menu-top">
+      <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+      <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
+      <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
+      <li><a href="customers.html" class="active"><i class="fas fa-users"></i> Customers</a></li>
+      <li><a href="content.html"><i class="fas fa-file-alt"></i> Content</a></li>
+      <li><a href="marketing.html"><i class="fas fa-bullhorn"></i> Marketing</a></li>
+       <li><a href="themes.html"><i class="fas fa-palette"></i> Store Themes</a></li>
+        <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+      <li><a href="discounts.html"><i class="fas fa-tags"></i> Discounts</a></li>
+      <li><a href="sales-channels.html"><i class="fas fa-store"></i> Sales Channels</a></li>
+    </ul>
+    <ul class="menu-bottom" style="margin-top: 30px;">
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <h1>Customers</h1>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search customers by name or email...">
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th>Orders</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="customerTable">
+        <tr onclick="openCustomerSummary('ayesha@example.com')">
+          <td>Ayesha Khan</td>
+          <td>ayesha@example.com</td>
+          <td>Lahore, PK</td>
+          <td>5</td>
+          <td><span class="status active">Active</span></td>
+        </tr>
+       
+        <tr onclick="openCustomerSummary('ali@example.com')">
+          <td>Ali Raza</td>
+          <td>ali@example.com</td>
+          <td>Karachi, PK</td>
+          <td>2</td>
+          <td><span class="status inactive">Inactive</span></td>
+        </tr>
+        <tr onclick="openCustomerSummary('sarah@example.com')">
+          <td>Sarah Malik</td>
+          <td>sarah@example.com</td>
+          <td>Islamabad, PK</td>
+          <td>7</td>
+          <td><span class="status active">Active</span></td>
+        </tr>
+        <tr onclick="openCustomerSummary('hamza@example.com')">
+          <td>Hamza Sheikh</td>
+          <td>hamza@example.com</td>
+          <td>Faisalabad, PK</td>
+          <td>0</td>
+          <td><span class="status inactive">Inactive</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const store = localStorage.getItem("store_name");
+    const storeTitle = document.getElementById("storeTitle");
+    if (store && storeTitle) storeTitle.textContent = `${store} Store`;
+
+    const searchInput = document.getElementById("searchInput");
+    const tableRows = document.querySelectorAll("#customerTable tr");
+
+    searchInput.addEventListener("input", () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      tableRows.forEach(row => {
+        const name = row.children[0].textContent.toLowerCase();
+        const email = row.children[1].textContent.toLowerCase();
+        row.style.display = (name.includes(searchTerm) || email.includes(searchTerm)) ? "" : "none";
+      });
+    });
+    function openCustomerSummary(email) {
+  // Optional: Encode email if special characters exist
+  const encoded = encodeURIComponent(email);
+  window.location.href = `customer-summary.html?email=${encoded}`;
+}
+  </script>
+</body>
+</html>
