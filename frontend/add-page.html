@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tiny.cloud/1/hao1w2wju24khcwvqslwjdjhdsdbn9tgfh9uxu904dxhgzxo/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f3f5;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.06);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 20px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .radio-group {
+      margin-top: 10px;
+    }
+
+    .radio-group label {
+      font-weight: 400;
+      margin-right: 15px;
+    }
+
+    .search-preview {
+      background: #f6f6f7;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .search-preview h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #1a0dab;
+    }
+
+    .search-preview p {
+      margin: 4px 0;
+      font-size: 13px;
+      color: #545454;
+    }
+
+    .btn {
+      background-color: #2a62ff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 14px;
+      border-radius: 6px;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #1e4bdd;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Add Page</h1>
+
+    <form id="pageForm">
+
+      <label for="title">Title</label>
+      <input type="text" id="title" placeholder="e.g. About Us" />
+
+      <label for="editor">Description</label>
+      <textarea id="editor"></textarea>
+
+      <label>Visibility</label>
+      <div class="radio-group">
+        <label><input type="radio" name="visibility" value="visible" checked /> Visible</label>
+        <label><input type="radio" name="visibility" value="hidden" /> Hidden</label>
+      </div>
+
+      <label>Search Engine Listing</label>
+      <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: #f9f9f9;">
+
+        <label for="seo-title-input">SEO Title</label>
+        <input type="text" id="seo-title-input" placeholder="e.g. About Our Brand" />
+
+        <label for="seo-url-input">URL Handle</label>
+        <input type="text" id="seo-url-input" placeholder="e.g. about-us" />
+
+        <label for="seo-desc-input">SEO Description</label>
+        <textarea id="seo-desc-input" placeholder="A short description that may appear in search results."></textarea>
+
+        <div style="margin-top: 20px;">
+          <label style="font-weight: 600;">Preview</label>
+          <div class="search-preview">
+            <h3 id="seo-title-preview">Your Page Title</h3>
+            <p id="seo-url-preview">https://yourstore.com/pages/your-page</p>
+            <p id="seo-desc-preview">This is how your page might appear in search results.</p>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Publish Page</button>
+    </form>
+  </div>
+
+  <script>
+    // WYSIWYG editor
+    tinymce.init({
+      selector: '#editor',
+  plugins: 'image media link code lists table advlist',
+  toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | image media link | code',
+  height: 300,
+  branding: false
+});
+
+
+    // SEO live preview
+    const seoTitleInput = document.getElementById('seo-title-input');
+    const seoDescInput = document.getElementById('seo-desc-input');
+    const seoUrlInput = document.getElementById('seo-url-input');
+
+    const seoTitlePreview = document.getElementById('seo-title-preview');
+    const seoDescPreview = document.getElementById('seo-desc-preview');
+    const seoUrlPreview = document.getElementById('seo-url-preview');
+
+    seoTitleInput.addEventListener('input', () => {
+      seoTitlePreview.textContent = seoTitleInput.value || 'Your Page Title';
+    });
+
+    seoDescInput.addEventListener('input', () => {
+      seoDescPreview.textContent = seoDescInput.value.substring(0, 160) || 'This is how your page might appear in search results.';
+    });
+
+    seoUrlInput.addEventListener('input', () => {
+      const slug = seoUrlInput.value.trim().toLowerCase().replace(/\s+/g, '-');
+      seoUrlPreview.textContent = `https://yourstore.com/pages/${slug || 'your-page'}`;
+    });
+
+    // Form submit
+    document.getElementById('pageForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Redirect after "submission"
+      window.location.href = "pages.html";
+    });
+  </script>
+
+</body>
+</html>

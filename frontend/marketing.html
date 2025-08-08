@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marketing | Shopify Clone</title>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>Marketing</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * {
       margin: 0;
@@ -16,8 +17,6 @@
 
     body {
       background: #f4f6f8;
-      margin: 0;
-      display: flex;
     }
 
     .sidebar {
@@ -26,10 +25,10 @@
       color: white;
       padding: 20px;
       height: 100vh;
-      overflow-y: auto;
       position: fixed;
       top: 0;
       left: 0;
+      overflow-y: auto;
     }
 
     .sidebar h2 {
@@ -65,89 +64,110 @@
       padding-left: 16px;
     }
 
+    .sidebar .submenu a {
+      font-size: 14px;
+      padding-left: 32px;
+      color: #e0eaff;
+    }
+
     .main {
       margin-left: 230px;
       padding: 30px;
-      width: calc(100% - 230px);
     }
 
-    .header {
+    .page-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
-    .header h1 {
-      margin: 0;
+    .page-header h1 {
       font-size: 24px;
-      color: #333;
-    }
-
-    .add-btn {
-      background: #2563eb;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .add-btn:hover {
-      background: #1e40af;
-    }
-
-    .actions input {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 250px;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    th,
-    td {
-      padding: 12px 16px;
-      text-align: left;
-    }
-
-    thead {
-      background: #f1f5f9;
-    }
-
-    tbody tr:hover {
-      background: #f9fafb;
-    }
-
-    .status {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
       font-weight: 600;
     }
 
-    .running {
-      background: #dcfce7;
-      color: #166534;
+    .page-header button {
+      padding: 10px 16px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
     }
 
-    .paused {
-      background: #fef9c3;
-      color: #92400e;
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .card-actions {
+      margin-top: 15px;
+    }
+
+    .card-actions a {
+      text-decoration: none;
+      color: #1a73e8;
+      font-weight: 500;
+    }
+
+    .tab-card {
+      padding: 0;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .tab-header {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: #f4f6f8;
+      border: none;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .tab-btn:hover {
+      background: #e2e6ea;
+    }
+
+    .tab-btn.active-tab {
+      background: #ffffff;
+      border-bottom: 2px solid #1a73e8;
+      font-weight: 600;
+    }
+
+    .tab-section {
+      padding: 20px;
+      background: #fff;
     }
   </style>
 </head>
 <body>
-
   <div class="sidebar" id="sidebar">
     <h2 id="storeTitle">Your Store</h2>
     <ul>
@@ -157,9 +177,9 @@
       <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
       <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
       <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
-      <li><a href="content.html"><i class="fas fa-file-alt"></i> Content</a></li>
+      <li><a href="content.html"><i class="fas fa-bullhorn"></i> Content</a></li>
       <li><a href="marketing.html" class="active"><i class="fas fa-bullhorn"></i> Marketing</a></li>
-       <li><a href="themes.html"><i class="fas fa-palette"></i> Store Themes</a></li>
+      <li><a href="themes.html"><i class="fas fa-palette"></i> Store Themes</a></li>
       <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
       <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
       <li><a href="discounts.html"><i class="fas fa-tags"></i> Discounts</a></li>
@@ -172,45 +192,128 @@
   </div>
 
   <div class="main">
-    <div class="header">
+    <div class="page-header">
       <h1>Marketing</h1>
-      <button class="add-btn" onclick="alert('Redirect to campaign builder...')">
-        <i class="fas fa-plus"></i> Create Campaign
-      </button>
+      <button><i class="fas fa-plus"></i> Create Campaign</button>
     </div>
 
-    <input type="text" id="searchBox" placeholder="Search campaigns..." onkeyup="filterCampaigns()" class="actions" />
+    <div class="card">
+      <h2>Email Campaign</h2>
+      <p>Engage customers by sending tailored email campaigns.</p>
+      <div class="card-actions">
+        <a href="#">Set up email</a>
+      </div>
+    </div>
 
-    <table id="campaignsTable">
-      <thead>
-        <tr>
-          <th>Campaign Name</th>
-          <th>Channel</th>
-          <th>Status</th>
-          <th>Budget</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Summer Sale</td>
-          <td>Email</td>
-          <td><span class="status running">Running</span></td>
-          <td>$300</td>
-        </tr>
-        <tr>
-          <td>Instagram Boost</td>
-          <td>Social Media</td>
-          <td><span class="status paused">Paused</span></td>
-          <td>$150</td>
-        </tr>
-        <tr>
-          <td>Google Ads</td>
-          <td>Search</td>
-          <td><span class="status running">Running</span></td>
-          <td>$500</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h2>Google Ads</h2>
+      <p>Bring traffic to your store by connecting with shoppers on Google.</p>
+      <div class="card-actions">
+        <a href="#">Connect Google account</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Meta (Facebook & Instagram)</h2>
+      <p>Reach people on Facebook and Instagram by creating marketing campaigns.</p>
+      <div class="card-actions">
+        <a href="#">Connect Meta account</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Marketing Automations</h2>
+      <p>Automatically send abandoned cart emails and more with automation workflows.</p>
+      <div class="card-actions">
+        <a href="#">Explore automations</a>
+      </div>
+    </div>
+
+    <!-- TABS SECTION -->
+    <div class="card tab-card">
+      <div class="tab-header">
+        <button onclick="showTab('overview')" class="tab-btn" id="tab-overview">Overview</button>
+        <button onclick="showTab('automations')" class="tab-btn" id="tab-automations">Automations</button>
+        <button onclick="showTab('campaigns')" class="tab-btn" id="tab-campaigns">Campaigns</button>
+        <button onclick="showTab('reports')" class="tab-btn" id="tab-reports">Reports</button>
+      </div>
+
+      <div id="tabContent">
+        <!-- Overview -->
+        <div id="overview" class="tab-section">
+          <h2>Real-time Analytics</h2>
+         <canvas id="overviewChart" style="max-width: 100%; height: 50px;"></canvas>
+          <p>Live traffic, clicks, and engagement stats</p>
+          <ul style="margin-top: 10px;">
+            <li>🟢 Live Visitors: <strong>27</strong></li>
+            <li>📈 Ad Clicks Today: <strong>312</strong></li>
+            <li>💬 Campaign Engagement Rate: <strong>4.2%</strong></li>
+            <li>🛒 Conversions from Ads: <strong>58</strong></li>
+          </ul>
+        </div>
+
+        <!-- Automations -->
+        <div id="automations" class="tab-section" style="display:none;">
+          <h2>Marketing Automations</h2>
+         <canvas id="automationChart" style="max-width: 100%; height: 70px;"></canvas>
+          <p>You have 3 workflows enabled:</p>
+          <ul>
+            <li>🔁 Abandoned Cart Email</li>
+            <li>🎁 Post-Purchase Upsell</li>
+            <li>📩 Welcome Email Sequence</li>
+          </ul>
+        </div>
+
+        <!-- Campaigns -->
+        <div id="campaigns" class="tab-section" style="display:none;">
+          <h2>Active Campaigns</h2>
+           <canvas id="campaignChart" style="max-width: 100%; height: 100px;"></canvas>
+          <p>Overview of ongoing ad campaigns:</p>
+          <table style="width:100%; margin-top: 10px; border-collapse: collapse;">
+            <thead>
+              <tr style="text-align: left; background: #f9f9f9;">
+                <th style="padding: 8px; border-bottom: 1px solid #ccc;">Name</th>
+                <th style="padding: 8px; border-bottom: 1px solid #ccc;">Channel</th>
+                <th style="padding: 8px; border-bottom: 1px solid #ccc;">Status</th>
+                <th style="padding: 8px; border-bottom: 1px solid #ccc;">Clicks</th>
+                <th style="padding: 8px; border-bottom: 1px solid #ccc;">Conversions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px;">July Sale Email</td>
+                <td style="padding: 8px;">Email</td>
+                <td style="padding: 8px;">Running</td>
+                <td style="padding: 8px;">820</td>
+                <td style="padding: 8px;">65</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">Summer Ad Campaign</td>
+                <td style="padding: 8px;">Google</td>
+                <td style="padding: 8px;">Paused</td>
+                <td style="padding: 8px;">1103</td>
+                <td style="padding: 8px;">74</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">Facebook Remarketing</td>
+                <td style="padding: 8px;">Meta</td>
+                <td style="padding: 8px;">Running</td>
+                <td style="padding: 8px;">670</td>
+                <td style="padding: 8px;">48</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Reports -->
+        <div id="reports" class="tab-section" style="display:none;">
+          <h2>Reports</h2>
+          <canvas id="reportChart" style="max-width: 100%; height: 100px;"></canvas>
+          <p>Export detailed performance reports of your campaigns.</p>
+          <button style="margin-top:10px; padding: 8px 16px; background: #1a73e8; color: #fff; border: none; border-radius: 6px;">Download CSV</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -218,14 +321,113 @@
     const storeTitle = document.getElementById("storeTitle");
     if (store && storeTitle) storeTitle.textContent = `${store} Store`;
 
-    function filterCampaigns() {
-      const q = document.getElementById("searchBox").value.toLowerCase();
-      document.querySelectorAll("#campaignsTable tbody tr").forEach(tr => {
-        const name = tr.children[0].innerText.toLowerCase();
-        tr.style.display = name.includes(q) ? "" : "none";
-      });
+    function toggleContentMenu() {
+      const submenu = document.getElementById("contentSubMenu");
+      submenu.style.display = submenu.style.display === "none" ? "block" : "none";
     }
-  </script>
 
+    function showTab(tabId) {
+      const sections = document.querySelectorAll(".tab-section");
+      sections.forEach((sec) => sec.style.display = "none");
+
+      const buttons = ["overview", "automations", "campaigns", "reports"];
+      buttons.forEach((btn) => {
+        document.getElementById("tab-" + btn).classList.remove("active-tab");
+      });
+
+      document.getElementById(tabId).style.display = "block";
+      document.getElementById("tab-" + tabId).classList.add("active-tab");
+    }
+ 
+  document.addEventListener("DOMContentLoaded", function () {
+    showTab("overview");
+
+    // Overview Chart - Line
+    new Chart(document.getElementById("overviewChart"), {
+      type: "line",
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [
+          {
+            label: "Clicks",
+            data: [100, 180, 250, 320, 300, 400, 390],
+            borderColor: "#1a73e8",
+            fill: false
+          },
+          {
+            label: "Conversions",
+            data: [10, 30, 45, 60, 55, 70, 68],
+            borderColor: "#34a853",
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: "top" } }
+      }
+    });
+
+    // Automations Chart - Pie
+    new Chart(document.getElementById("automationChart"), {
+      type: "pie",
+      data: {
+        labels: ["Abandoned Cart", "Upsell", "Welcome Email"],
+        datasets: [{
+          data: [40, 30, 30],
+          backgroundColor: ["#1a73e8", "#34a853", "#fbbc04"]
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    // Campaign Chart - Bar
+    new Chart(document.getElementById("campaignChart"), {
+      type: "bar",
+      data: {
+        labels: ["July Email", "Summer Ads", "FB Remarketing"],
+        datasets: [
+          {
+            label: "Clicks",
+            data: [820, 1103, 670],
+            backgroundColor: "#1a73e8"
+          },
+          {
+            label: "Conversions",
+            data: [65, 74, 48],
+            backgroundColor: "#34a853"
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Report Chart - Bar
+    new Chart(document.getElementById("reportChart"), {
+      type: "bar",
+      data: {
+        labels: ["Email", "Google", "Meta"],
+        datasets: [{
+          label: "Downloads",
+          data: [12, 9, 6],
+          backgroundColor: "#1a73e8"
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  });
+</script>
 </body>
 </html>

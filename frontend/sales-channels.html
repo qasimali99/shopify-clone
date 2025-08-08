@@ -148,48 +148,90 @@
 
   <div class="main">
     <h1>Sales Channels</h1>
-    <div class="channels">
-      <div class="channel-card">
-        <i class="fas fa-store"></i>
-        <h3>Online Store</h3>
-        <p>Your main eCommerce website storefront.</p>
-        <button>Manage</button>
-      </div>
-
-      <div class="channel-card">
-        <i class="fab fa-facebook"></i>
-        <h3>Facebook Shop</h3>
-        <p>Sell products directly on your Facebook page.</p>
-        <button>Connect</button>
-      </div>
-
-      <div class="channel-card">
-        <i class="fab fa-instagram"></i>
-        <h3>Instagram</h3>
-        <p>Tag products in posts and stories for seamless shopping.</p>
-        <button>Connect</button>
-      </div>
-
-      <div class="channel-card">
-        <i class="fab fa-amazon"></i>
-        <h3>Amazon</h3>
-        <p>Sell on Amazon and sync inventory in real time.</p>
-        <button>Connect</button>
-      </div>
-
-      <div class="channel-card">
-        <i class="fab fa-whatsapp"></i>
-        <h3>WhatsApp</h3>
-        <p>Engage with customers and receive orders via WhatsApp.</p>
-        <button>Connect</button>
-      </div>
+    <div class="channels" id="channelsContainer">
+      <!-- Channels will be loaded here -->
     </div>
   </div>
 
   <script>
+    const userEmail = localStorage.getItem("userEmail");
     const store = localStorage.getItem("store_name");
     const storeTitle = document.getElementById("storeTitle");
     if (store && storeTitle) storeTitle.textContent = `${store} Store`;
+
+    const channels = [
+      { id: "onlineStore", name: "Online Store", icon: "fas fa-store", description: "Your main eCommerce website storefront." },
+      { id: "facebook", name: "Facebook Shop", icon: "fab fa-facebook", description: "Sell products directly on your Facebook page." },
+      { id: "instagram", name: "Instagram", icon: "fab fa-instagram", description: "Tag products in posts and stories for seamless shopping." },
+      { id: "amazon", name: "Amazon", icon: "fab fa-amazon", description: "Sell on Amazon and sync inventory in real time." },
+      { id: "whatsapp", name: "WhatsApp", icon: "fab fa-whatsapp", description: "Engage with customers and receive orders via WhatsApp." },
+    ];
+
+    const container = document.getElementById("channelsContainer");
+    let connected = {};
+
+    async function loadChannels() {
+      try {
+        const signup_Email = localStorage.getItem("userEmail");
+const res = await fetch(`/api/sales-channels?signup_Email=${signup_Email}`);
+        const data = await res.json();
+        connected = data || {};
+      } catch (err) {
+        console.error("Failed to fetch channels:", err);
+      }
+
+      renderChannels();
+    }
+
+    function renderChannels() {
+      container.innerHTML = "";
+      channels.forEach(channel => {
+        const isConnected = connected[channel.id];
+        const card = document.createElement("div");
+        card.className = "channel-card";
+
+        card.innerHTML = `
+          <i class="${channel.icon}"></i>
+          <h3>${channel.name}</h3>
+          <p>${channel.description}</p>
+          <button onclick="toggleChannel('${channel.id}', this)">${isConnected ? 'Disconnect' : 'Connect'}</button>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    async function toggleChannel(id, btn) {
+  const email = localStorage.getItem("userEmail");
+
+  if (!connected[id]) {
+    // 🧭 Start linking OAuth
+    if (id === "facebook") {
+      const redirectUri = encodeURIComponent("http://localhost:3000/api/sales-channels/facebook/callback");
+      const clientId = "1405951867301181";
+      const oauthUrl = `https://www.facebook.com/v14.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&state=${email}&scope=email,public_profile`;
+
+      window.location.href = oauthUrl; // 🔁 Redirect user to Facebook
+      return;
+    }
+
+    alert("OAuth not implemented for " + id);
+    return;
+  }
+
+  // Handle disconnect
+  const newStatus = false;
+  connected[id] = newStatus;
+  btn.textContent = "Connect";
+
+  await fetch(`/api/sales-channels?email=${email}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ [id]: newStatus })
+  });
+}
+
+    loadChannels();
   </script>
 
 </body>

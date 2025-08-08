@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Blog Post</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tiny.cloud/1/hao1w2wju24khcwvqslwjdjhdsdbn9tgfh9uxu904dxhgzxo/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background-color: #f1f1f1;
+      padding: 30px;
+    }
+    .main-content {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="date"], textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .visibility-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .search-preview {
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .media-upload {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin-bottom: 30px;
+    }
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      gap: 10px;
+      min-height: 100px;
+      border: 2px dashed #ccc;
+      padding: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+    .preview-item {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .preview-item img, .preview-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .remove-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+    }
+    .submit-btn {
+      background-color: #1a73e8;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .submit-btn:hover {
+      background-color: #0f5ed7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-content">
+  <h1>Add Blog Post</h1>
+
+  <form id="blogForm">
+    <div class="form-group">
+      <label for="title">Post Title</label>
+      <input type="text" id="title" placeholder="Enter blog post title" />
+    </div>
+
+    <div class="form-group">
+      <label for="editor">Editor Name</label>
+      <input type="text" id="editor" placeholder="Enter editor's name" />
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status">
+        <option value="published">Published</option>
+        <option value="draft">Draft</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Publish Date</label>
+      <input type="date" id="date" />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select id="category">
+        <option value="">-- Select Category --</option>
+        <option value="news">News</option>
+        <option value="events">Events</option>
+        <option value="updates">Updates</option>
+        <option value="guides">Guides</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="tags">Tags (comma separated)</label>
+      <input type="text" id="tags" placeholder="e.g. fashion, summer, trends" />
+    </div>
+
+    <div class="form-group">
+      <label for="desc">Post Description</label>
+      <textarea id="desc"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Visibility</label>
+      <div class="visibility-options">
+        <label><input type="radio" name="visibility" value="visible" checked /> Visible</label>
+        <label><input type="radio" name="visibility" value="hidden" /> Hidden</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Search Engine Listing</label>
+      <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: #f9f9f9;">
+        <div class="form-group">
+          <label for="seo-title-input">SEO Title</label>
+          <input type="text" id="seo-title-input" placeholder="e.g. Amazing Summer Fashion Trends" />
+        </div>
+        <div class="form-group">
+          <label for="seo-url-input">URL Handle</label>
+          <input type="text" id="seo-url-input" placeholder="e.g. summer-fashion-trends" />
+        </div>
+        <div class="form-group">
+          <label for="seo-desc-input">SEO Description</label>
+          <textarea id="seo-desc-input" placeholder="Short search engine description"></textarea>
+        </div>
+        <div style="margin-top: 20px;">
+          <label style="font-weight: 600;">Preview</label>
+          <div class="search-preview">
+            <h3 id="seo-title-preview">Your Blog Post Title</h3>
+            <p id="seo-url-preview">https://yourstore.com/blogs/your-post</p>
+            <p id="seo-desc-preview">This is how your post might appear in a search engine result.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group media-upload">
+      <label>Drag & Drop Featured Images</label>
+      <div class="preview-container" id="imageDropZone">Drop images here</div>
+      <input type="file" id="imageUpload" accept="image/*" multiple />
+    </div>
+
+    <div class="form-group media-upload">
+      <label>Drag & Drop Videos</label>
+      <div class="preview-container" id="videoDropZone">Drop videos here</div>
+      <input type="file" id="videoUpload" accept="video/*" multiple />
+    </div>
+
+    <button type="submit" class="submit-btn">Publish Post</button>
+  </form>
+</div>
+
+<script>
+  tinymce.init({
+    selector: '#desc',
+    plugins: 'image media link code lists preview fullscreen',
+    toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright | image media link | code fullscreen',
+    height: 300
+  });
+
+  function handleFiles(files, container, type) {
+    [...files].forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const preview = document.createElement('div');
+        preview.className = 'preview-item';
+        preview.innerHTML = type === 'image'
+          ? `<img src="${e.target.result}" /><button class="remove-btn">&times;</button>`
+          : `<video src="${e.target.result}" muted autoplay loop></video><button class="remove-btn">&times;</button>`;
+        preview.querySelector('.remove-btn').onclick = () => preview.remove();
+        container.appendChild(preview);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function enableDragDrop(dropZone, type) {
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.style.borderColor = '#1a73e8';
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.style.borderColor = '#ccc';
+    });
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.style.borderColor = '#ccc';
+      handleFiles(e.dataTransfer.files, dropZone, type);
+    });
+  }
+
+  enableDragDrop(document.getElementById('imageDropZone'), 'image');
+  enableDragDrop(document.getElementById('videoDropZone'), 'video');
+
+  document.getElementById('imageUpload').addEventListener('change', e => {
+    handleFiles(e.target.files, document.getElementById('imageDropZone'), 'image');
+    e.target.value = '';
+  });
+
+  document.getElementById('videoUpload').addEventListener('change', e => {
+    handleFiles(e.target.files, document.getElementById('videoDropZone'), 'video');
+    e.target.value = '';
+  });
+
+  // SEO preview live update
+  const seoTitleInput = document.getElementById('seo-title-input');
+  const seoDescInput = document.getElementById('seo-desc-input');
+  const seoUrlInput = document.getElementById('seo-url-input');
+  const seoTitlePreview = document.getElementById('seo-title-preview');
+  const seoDescPreview = document.getElementById('seo-desc-preview');
+  const seoUrlPreview = document.getElementById('seo-url-preview');
+
+  seoTitleInput.addEventListener('input', () => {
+    seoTitlePreview.textContent = seoTitleInput.value || 'Your Blog Post Title';
+  });
+
+  seoDescInput.addEventListener('input', () => {
+    seoDescPreview.textContent = seoDescInput.value.substring(0, 160) || 'This is how your post might appear in a search engine result.';
+  });
+
+  seoUrlInput.addEventListener('input', () => {
+    const slug = seoUrlInput.value.trim().toLowerCase().replace(/\s+/g, '-');
+    seoUrlPreview.textContent = `https://yourstore.com/blogs/${slug || 'your-post'}`;
+  });
+
+  // Form submit
+  document.getElementById('blogForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+      title: document.getElementById('title').value,
+      editor: document.getElementById('editor').value,
+      status: document.getElementById('status').value,
+      date: document.getElementById('date').value,
+      category: document.getElementById('category').value,
+      tags: document.getElementById('tags').value,
+      description: tinymce.get("desc").getContent(),
+      visibility: document.querySelector('input[name="visibility"]:checked').value
+    };
+    localStorage.setItem("editPostData", JSON.stringify(data));
+    window.location.href = 'blog-post.html';
+  });
+</script>
+</body>
+</html>

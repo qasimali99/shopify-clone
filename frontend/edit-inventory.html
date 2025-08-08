@@ -6,6 +6,7 @@
   <title>Edit Product</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tiny.cloud/1/hao1w2wju24khcwvqslwjdjhdsdbn9tgfh9uxu904dxhgzxo/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
   <style>
     * {
       margin: 0;
@@ -223,7 +224,7 @@
 
     <div class="form-group">
       <label>Description</label>
-      <textarea placeholder="Product description..."></textarea>
+      <textarea id="productDescription" placeholder="Product description..."></textarea>
     </div>
 
     <div class="row">
@@ -609,6 +610,13 @@ function addLocation() {
     document.querySelector(".location-qty").value = "";
   }
 }
+ tinymce.init({
+  selector: '#productDescription',
+  plugins: 'image media link code lists table advlist',
+  toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | image media link | code',
+  height: 300,
+  branding: false
+});
 
   document.getElementById("editProductForm").addEventListener("submit", function (e) {
     e.preventDefault();

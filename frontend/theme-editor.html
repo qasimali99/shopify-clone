@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Theme Editor</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      user-select: none;
+    }
+
+    #sidebar {
+      width: 260px;
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    #sidebar h3 {
+      margin-top: 0;
+    }
+
+    .add-component {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #e0e0e0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    #saveBtn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #0070f3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #preview {
+      flex: 1;
+      border: none;
+      pointer-events: all;
+      min-width: 0;
+      user-select: none;
+    }
+
+    .editor-toolbar {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 5px;
+      display: flex;
+      gap: 5px;
+      z-index: 9999;
+    }
+
+    .editor-toolbar button {
+      padding: 2px 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sidebar">
+    <h3>Widgets</h3>
+
+    <button class="add-component" data-html="<h2 contenteditable='true'>Editable Heading</h2>">+ Add Heading</button>
+    <button class="add-component" data-html="<p contenteditable='true'>Editable paragraph text.</p>">+ Add Paragraph</button>
+    <button class="add-component" data-html="<button>Click Me</button>">+ Add Button</button>
+    <button class="add-component" data-html='<div style="display:flex; gap:20px;"><div style="flex:1;"><h3 contenteditable="true">Left Column</h3><p contenteditable="true">Text here...</p></div><div style="flex:1;"><img src="https://via.placeholder.com/200" width="100%" /></div></div>'>+ 2-Column Section</button>
+    <button class="add-component" data-html='<div style="padding:40px; background:#ddd; text-align:center;"><h1 contenteditable="true">Banner Title</h1><p contenteditable="true">Banner subtitle or description</p></div>'>+ Banner Section</button>
+
+    <button id="saveBtn">Save Changes</button>
+  </div>
+
+  <iframe id="preview"></iframe>
+
+  <script>
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const themeName = getQueryParam("theme");
+    const iframe = document.getElementById("preview");
+
+    if (!themeName) {
+      alert("No theme specified.");
+    } else {
+      const themePath = themeName === "oldskool-html-bootstrap-main"
+        ? `themes/${themeName}/dist/index.html`
+        : `themes/${themeName}/index.html`;
+      iframe.src = themePath;
+    }
+
+    let undoStack = [];
+
+    iframe.addEventListener("load", () => {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+      function updateUndoStack() {
+        undoStack.push(iframeDoc.body.innerHTML);
+      }
+
+      makeTextEditable(iframeDoc);
+      enableImageReplacement(iframeDoc);
+      enableDragReorder(iframeDoc);
+      enableDeleteOnRightClick(iframeDoc);
+      enableFloatingToolbar(iframeDoc);
+
+      document.querySelectorAll(".add-component").forEach(button => {
+        button.addEventListener("click", () => {
+          const html = button.getAttribute("data-html");
+          updateUndoStack();
+          iframeDoc.body.insertAdjacentHTML("beforeend", html);
+          makeTextEditable(iframeDoc);
+          enableImageReplacement(iframeDoc);
+          enableDragReorder(iframeDoc);
+          enableDeleteOnRightClick(iframeDoc);
+          enableFloatingToolbar(iframeDoc);
+        });
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.key === 'z' && undoStack.length > 0) {
+          iframeDoc.body.innerHTML = undoStack.pop();
+          makeTextEditable(iframeDoc);
+          enableImageReplacement(iframeDoc);
+          enableDragReorder(iframeDoc);
+          enableDeleteOnRightClick(iframeDoc);
+          enableFloatingToolbar(iframeDoc);
+        }
+      });
+    });
+
+    document.getElementById("saveBtn").addEventListener("click", () => {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      const updatedHTML = iframeDoc.documentElement.outerHTML;
+
+      fetch(`/api/themes/save/${themeName}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ html: updatedHTML })
+      })
+      .then(res => res.json())
+      .then(data => alert("Theme saved!"))
+      .catch(err => {
+        console.error(err);
+        alert("Error saving theme.");
+      });
+    });
+
+    function makeTextEditable(doc) {
+      const textElements = doc.querySelectorAll("h1, h2, h3, p, span");
+      textElements.forEach(el => el.setAttribute("contenteditable", "true"));
+    }
+
+    function enableImageReplacement(doc) {
+      const images = doc.querySelectorAll("img");
+      images.forEach(img => {
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.style.display = "none";
+          input.onchange = () => {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => img.src = e.target.result;
+            reader.readAsDataURL(file);
+          };
+          doc.body.appendChild(input);
+          input.click();
+          input.remove();
+        });
+      });
+    }
+
+    function enableDragReorder(doc) {
+      const allElements = doc.body.querySelectorAll("*");
+      allElements.forEach(el => {
+        el.setAttribute("draggable", "true");
+        el.addEventListener("dragstart", e => {
+          e.stopPropagation();
+          e.dataTransfer.setData("text/html", el.outerHTML);
+          el.classList.add("drag-source");
+        });
+        el.addEventListener("dragover", e => {
+          e.preventDefault();
+          el.style.border = "2px dashed #0070f3";
+        });
+        el.addEventListener("dragleave", () => el.style.border = "");
+        el.addEventListener("drop", e => {
+          e.preventDefault();
+          e.stopPropagation();
+          el.style.border = "";
+          const html = e.dataTransfer.getData("text/html");
+          const temp = document.createElement("div");
+          temp.innerHTML = html;
+          const draggedElement = temp.firstChild;
+          const source = doc.querySelector(".drag-source");
+          if (source) source.remove();
+          el.insertAdjacentElement("beforebegin", draggedElement);
+          makeTextEditable(doc);
+          enableImageReplacement(doc);
+          enableDragReorder(doc);
+          enableDeleteOnRightClick(doc);
+          enableFloatingToolbar(doc);
+        });
+        el.addEventListener("dragend", () => {
+          el.classList.remove("drag-source");
+          el.style.border = "";
+        });
+      });
+    }
+
+    function enableDeleteOnRightClick(doc) {
+      doc.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        if (confirm("Delete this element?")) e.target.remove();
+      });
+    }
+
+    function enableFloatingToolbar(doc) {
+      doc.querySelectorAll("body *").forEach(el => {
+        el.addEventListener("click", e => {
+          e.stopPropagation();
+          doc.querySelectorAll(".editor-toolbar").forEach(tb => tb.remove());
+
+          const toolbar = doc.createElement("div");
+          toolbar.className = "editor-toolbar";
+
+          const deleteBtn = doc.createElement("button");
+          deleteBtn.textContent = "🗑️";
+          deleteBtn.title = "Delete";
+          deleteBtn.onclick = () => el.remove();
+
+          const lockBtn = doc.createElement("button");
+          lockBtn.textContent = "🔒";
+          lockBtn.title = "Lock Section";
+          lockBtn.onclick = () => el.setAttribute("contenteditable", "false");
+
+          toolbar.appendChild(deleteBtn);
+          toolbar.appendChild(lockBtn);
+
+          doc.body.appendChild(toolbar);
+          const rect = el.getBoundingClientRect();
+          toolbar.style.top = rect.top + doc.defaultView.scrollY + "px";
+          toolbar.style.left = rect.left + doc.defaultView.scrollX + "px";
+        });
+      });
+    }
+  </script>
+</body>
+</html>

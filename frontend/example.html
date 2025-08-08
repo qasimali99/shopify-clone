@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sales Channels</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* SAME CSS AS YOUR ORIGINAL CODE (unchanged) */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: #f4f6f8; display: flex; }
+    .sidebar { width: 230px; background-color: #1a73e8; color: white; padding: 20px; height: 100vh; position: fixed; overflow-y: auto; }
+    .sidebar h2 { font-size: 20px; margin-bottom: 30px; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { margin: 12px 0; }
+    .sidebar a { color: white; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 6px; transition: background 0.2s, padding-left 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); padding-left: 16px; }
+    .main { margin-left: 230px; padding: 30px; width: calc(100% - 230px); }
+    .main h1 { margin-bottom: 20px; }
+    .channels { display: flex; flex-wrap: wrap; gap: 20px; }
+    .channel-card { width: 280px; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: 0.3s ease; }
+    .channel-card:hover { transform: translateY(-5px); }
+    .channel-card i { font-size: 30px; margin-bottom: 15px; color: #1a73e8; }
+    .channel-card h3 { margin: 0 0 10px; font-size: 18px; }
+    .channel-card p { font-size: 14px; color: #555; }
+    .channel-card button { margin-top: 15px; padding: 8px 14px; background-color: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .channel-card button:hover { background-color: #0c59c6; }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2 id="storeTitle">Your Store</h2>
+    <ul class="menu-top">
+      <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+      <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
+      <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
+      <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+      <li><a href="content.html"><i class="fas fa-file-alt"></i> Content</a></li>
+      <li><a href="marketing.html"><i class="fas fa-bullhorn"></i> Marketing</a></li>
+      <li><a href="themes.html"><i class="fas fa-palette"></i> Store Themes</a></li>
+      <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+      <li><a href="discounts.html"><i class="fas fa-tags"></i> Discounts</a></li>
+      <li><a href="sales-channels.html" class="active"><i class="fas fa-store"></i> Sales Channels</a></li>
+    </ul>
+    <ul class="menu-bottom" style="margin-top: 30px;">
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <h1>Sales Channels</h1>
+    <div class="channels" id="channelsContainer">
+      <!-- Channels will be loaded here -->
+    </div>
+  </div>
+
+  <script>
+    const userEmail = localStorage.getItem("userEmail");
+    const store = localStorage.getItem("store_name");
+    const storeTitle = document.getElementById("storeTitle");
+    if (store && storeTitle) storeTitle.textContent = `${store} Store`;
+
+    const channels = [
+      { id: "onlineStore", name: "Online Store", icon: "fas fa-store", description: "Your main eCommerce website storefront." },
+      { id: "facebook", name: "Facebook Shop", icon: "fab fa-facebook", description: "Sell products directly on your Facebook page." },
+      { id: "instagram", name: "Instagram", icon: "fab fa-instagram", description: "Tag products in posts and stories for seamless shopping." },
+      { id: "amazon", name: "Amazon", icon: "fab fa-amazon", description: "Sell on Amazon and sync inventory in real time." },
+      { id: "whatsapp", name: "WhatsApp", icon: "fab fa-whatsapp", description: "Engage with customers and receive orders via WhatsApp." },
+    ];
+
+    const container = document.getElementById("channelsContainer");
+    let connected = {};
+
+    async function loadChannels() {
+      try {
+        const res = await fetch(`/api/sales-channels?userEmail=${userEmail}`);
+        const data = await res.json();
+        connected = data || {};
+      } catch (err) {
+        console.error("Failed to fetch channels:", err);
+      }
+
+      renderChannels();
+    }
+
+    function renderChannels() {
+      container.innerHTML = "";
+      channels.forEach(channel => {
+        const isConnected = connected[channel.id];
+        const card = document.createElement("div");
+        card.className = "channel-card";
+
+        card.innerHTML = `
+          <i class="${channel.icon}"></i>
+          <h3>${channel.name}</h3>
+          <p>${channel.description}</p>
+          <button onclick="toggleChannel('${channel.id}', this)">${isConnected ? 'Disconnect' : 'Connect'}</button>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    async function toggleChannel(id, btn) {
+      const newStatus = !connected[id];
+      connected[id] = newStatus;
+
+      btn.textContent = newStatus ? "Disconnect" : "Connect";
+
+      try {
+        await fetch(`/api/sales-channels?userEmail=${userEmail}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ [id]: newStatus })
+        });
+      } catch (err) {
+        alert("Failed to update channel.");
+        connected[id] = !newStatus; // revert
+        btn.textContent = !newStatus ? "Disconnect" : "Connect";
+      }
+    }
+
+    loadChannels();
+  </script>
+
+</body>
+</html>

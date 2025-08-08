@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tiny.cloud/1/hao1w2wju24khcwvqslwjdjhdsdbn9tgfh9uxu904dxhgzxo/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
+  <style>
+    /* [CSS omitted here for brevity but same as your provided version] */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      padding: 20px;
+      background: #f5f7fb;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .row .form-group {
+      flex: 1;
+    }
+
+    .multi-select {
+      height: auto;
+    }
+
+    .image-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .image-preview img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .tag-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-height: 46px;
+      background: #fff;
+      justify-content: flex-end; /* 👈 This moves tags to the right side */
+    }
+
+    .tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-height: 46px;
+  background: #fff;
+  justify-content: flex-end; /* 👈 Moves tags to the right side */
+}
+
+    .tag {
+      background: #007bff;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 14px;
+    }
+
+    /* CSS: styles.css */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .multi-select {
+      width: 180px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+
+    .color-row,
+    .variant-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .add-btn {
+      padding: 6px 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      height: 38px;
+    }
+
+    .add-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* CSS: styles.css */
+    #drop-area {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 20px;
+      background: #fafafa;
+    }
+
+    #drop-area:hover {
+      background-color: #f0f8ff;
+    }
+
+    #mediaPreview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #mediaPreview img,
+    #mediaPreview video {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .media-item {
+      position: relative;
+      display: inline-block;
+    }
+
+    .media-item button {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: red;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+    }
+
+    #color-list,
+    #variant-list {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background-color: #007bff;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 13px;
+    }
+
+    button {
+      padding: 10px 18px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .tag {
+      padding-right: 14px;
+      position: relative;
+    }
+
+    #size-list,
+    #material-list,
+    #color-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    #size-list .tag,
+    #material-list .tag,
+    #color-list .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Edit Product</h1>
+  <form id="editProductForm">
+    <!-- [form content same as your provided code, no change needed] -->
+    <div class="form-group">
+      <label>Product Name</label>
+      <input type="text" placeholder="Enter product name" />
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="productDescription" placeholder="Product description..."></textarea>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Original Price</label>
+        <input type="number" id="originalPrice" placeholder="e.g. 1999" />
+      </div>
+      <div class="form-group">
+        <label>Selling Price</label>
+        <input type="number" id="sellingPrice" placeholder="e.g. 1999" />
+      </div>
+      <div class="form-group">
+        <label>Currency</label>
+        <select>
+          <option>PKR</option>
+          <option>USD</option>
+          <option>EUR</option>
+          <option>INR</option>
+          <option>AED</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Categories</label>
+      <select id="main-category">
+        <option value="">Select Category</option>
+        <option value="clothing">Clothing</option>
+        <option value="electronics">Electronics</option>
+        <option value="accessories">Accessories</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="subcategory-container" style="display:none;">
+      <label>Product Type</label>
+      <select id="subcategory"></select>
+    </div>
+    <!-- HTML: edit-product.html -->
+    <div class="form-group">
+      <label>Colors</label>
+      <div id="color-section">
+        <div class="color-row">
+          <select class="multi-select color-select">
+            <option value="">Select color</option>
+            <option>Black</option>
+            <option>White</option>
+            <option>Red</option>
+            <option>Blue</option>
+            <option>Green</option>
+            <option>Yellow</option>
+            <option>Pink</option>
+            <option>Purple</option>
+            <option>Orange</option>
+            <option>Grey</option>
+          </select>
+          <button type="button" class="add-btn" onclick="addColor()">Add Color</button>
+        </div>
+        <div id="color-list"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Variants (Sizes)</label>
+      <div id="variant-section">
+        <div class="variant-row">
+          <select class="multi-select variant-select">
+            <option value="">Select size</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+            <option>2XL</option>
+          </select>
+          <button type="button" class="add-btn" onclick="addSize()">Add Size</button>
+        </div>
+        <div id="size-list"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Material</label>
+      <div class="variant-row">
+        <select class="multi-select material-select">
+          <option value="">Select material</option>
+          <option>Cotton</option>
+          <option>Mesh</option>
+          <option>Polyster</option>
+          <option>Dri-Fit</option>
+          <option>Fleece</option>
+        </select>
+        <button type="button" class="add-btn" onclick="addMaterial()">Add Material</button>
+      </div>
+      <div id="material-list"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="mediaUpload">Upload Images & Videos</label>
+      <div id="drop-area">
+        <p>Drag & drop media here or click to upload</p>
+        <input type="file" id="mediaUpload" accept="image/*,video/*" multiple />
+      </div>
+      <div id="mediaPreview"></div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Vendor</label>
+        <input type="text" id="vendor" placeholder="Enter vendor name" />
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select id="status">
+          <option value="Active">Active</option>
+          <option value="Draft">Draft</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Tags</label>
+      <div class="tag-input" id="tagInput">
+        <input type="text" id="tagTextBox" placeholder="Type and press enter...">
+      </div>
+    </div>
+
+    <!-- Inventory Section -->
+    <div class="form-group">
+      <label><input type="checkbox" id="trackInventory"> Track Inventory</label>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px;"></div>
+    <div id="inventoryDetails" style="display: none;">
+      <div class="form-group">
+        <label><input type="checkbox" id="allowOOS"> Continue selling when out of stock</label>
+      </div>
+      <div class="form-group">
+        <label>Inventory by Location</label>
+        <div id="inventoryTable">
+          <div class="row">
+            <div class="form-group">
+              <input type="text" placeholder="Location (e.g. Warehouse)" class="location-name" />
+            </div>
+            <div class="form-group">
+              <input type="number" placeholder="Quantity" class="location-qty" />
+            </div>
+            <button type="button" class="add-btn" onclick="addLocation()">Add Location</button>
+          </div>
+          <!-- Container where location tags will be appended -->
+          <div id="locationList"></div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-bottom: 10px;">
+        <div class="form-group">
+          <label>Barcode</label>
+          <input type="text" placeholder="Enter barcode" />
+        </div>
+        <div class="form-group">
+          <label>SKU</label>
+          <input type="text" placeholder="Enter SKU" />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <label>Product Weight</label>
+        <input type="number" id="productWeight" placeholder="e.g. 500" />
+      </div>
+      <div class="form-group">
+        <label>Weight Unit</label>
+        <select id="weightUnit">
+          <option>Grams</option>
+          <option>Kilograms</option>
+          <option>Milligrams</option>
+          <option>Liters</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <label>Available Quantity</label>
+        <input type="number" id="availableQty" placeholder="e.g. 120" />
+      </div>
+      <div class="form-group">
+        <label>On-Hand Quantity</label>
+        <input type="number" id="onHandQty" placeholder="e.g. 100" />
+      </div>
+    </div>
+
+    <button type="submit">Save Product</button>
+  </form>
+
+  <script>
+    // Utility: get URL query param
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name); // Extracts query parameter value
+    }
+
+    const productId = getQueryParam("id"); // should return value from URL
+    const uploadedMedia = []; // To store image/video URLs
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Ensure the productId is valid
+      if (!productId) {
+        alert("Product ID is missing from the URL.");
+        window.location.href = "products.html"; // Redirect to products page if no ID
+        return;  // Stop further execution if productId is missing
+      }
+
+      const isEditMode = !!productId;
+      const endpointBase = '/api/products';
+
+      if (isEditMode) {
+        try {
+          // Fetch product data
+          const res = await fetch(`${endpointBase}/${productId}`);
+          if (!res.ok) throw new Error('Failed to fetch product');
+          const data = await res.json();
+
+          // Initialize TinyMCE after fetching the product
+          tinymce.init({
+            selector: '#productDescription',
+            plugins: 'image media link code lists table advlist',
+            toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | image media link | code',
+            height: 300,
+            branding: false,
+            setup: function (editor) {
+              // Set content after TinyMCE initialization
+              editor.on('init', function () {
+                tinymce.get('productDescription').setContent(data.description); // Prefill description here
+              });
+            }
+          });
+
+          // Prefill form fields
+          document.querySelector('input[placeholder="Enter product name"]').value = data.title;
+          const nums = document.querySelectorAll('input[type="number"]');
+          nums[0].value = data.originalPrice;
+          nums[1].value = data.sellingPrice;
+          document.querySelectorAll('select')[0].value = data.currency;
+          document.getElementById('main-category').value = data.category;
+          document.getElementById('main-category').dispatchEvent(new Event('change'));
+          document.getElementById('subcategory').value = data.subcategory;
+          document.getElementById('vendor').value = data.vendor;
+          document.getElementById('status').value = data.status;
+
+          data.tags.forEach(t => {
+            const tag = document.createElement('span');
+            tag.className = 'tag'; tag.dataset.value = t; tag.textContent = t;
+            document.getElementById('tagInput').insertBefore(tag, document.getElementById('tagTextBox'));
+          });
+
+          data.colors.forEach(c => {
+            document.querySelector('.color-select').value = c;
+            addColor();
+          });
+
+          data.sizes.forEach(s => {
+            document.querySelector('.variant-select').value = s;
+            addSize();
+          });
+
+          data.materials.forEach(m => {
+            document.querySelector('.material-select').value = m;
+            addMaterial();
+          });
+
+          document.getElementById('trackInventory').checked = data.trackInventory;
+          document.getElementById('trackInventory').dispatchEvent(new Event('change'));
+          document.getElementById('allowOOS').checked = data.allowOOS;
+          document.querySelector('input[placeholder="Enter barcode"]').value = data.barcode;
+          document.querySelector('input[placeholder="Enter SKU"]').value = data.sku;
+          document.getElementById('productWeight').value = data.weight || '';
+          document.querySelectorAll('select')[2].value = data.weightUnit;
+          document.getElementById('availableQty').value = data.availableQty || '';
+          document.getElementById('onHandQty').value = data.onHandQty || '';
+
+
+          if (data.trackInventory) {
+            document.getElementById("inventoryDetails").style.display = "block";
+          }
+          function addLocation() {
+            const container = document.getElementById("inventoryTable");
+            const div = document.createElement("div");
+            div.classList.add("row");
+
+            div.innerHTML = `
+    <div class="form-group">
+      <input class="location-name" placeholder="Location (e.g. Warehouse)" />
+    </div>
+    <div class="form-group">
+      <input class="location-qty" type="number" placeholder="Quantity" />
+    </div>
+    <button type="button" class="add-btn" onclick="addLocation()">Add Location</button>
+  `;
+
+            container.appendChild(div);
+          }
+
+          if (Array.isArray(data.media)) {
+            data.media.forEach(url => {
+              uploadedMedia.push(url);
+              const ext = url.split('.').pop().toLowerCase();
+              const isVideo = ['mp4', 'webm'].includes(ext);
+
+              const wrapper = document.createElement('div');
+              wrapper.classList.add('media-item');
+
+              const el = document.createElement(isVideo ? 'video' : 'img');
+              el.src = url;
+              el.style.width = '120px';
+              el.style.height = '120px';
+              el.style.objectFit = 'cover';
+              if (isVideo) el.controls = true;
+
+              const delBtn = document.createElement('button');
+              delBtn.textContent = '×';
+              delBtn.onclick = () => {
+                wrapper.remove();
+                const index = uploadedMedia.indexOf(url);
+                if (index !== -1) uploadedMedia.splice(index, 1);
+              };
+
+              wrapper.appendChild(el);
+              wrapper.appendChild(delBtn);
+              document.getElementById('mediaPreview').appendChild(wrapper);
+            });
+          }
+
+
+        } catch (err) {
+          console.error(err);
+          alert('Error loading product for editing.');
+        }
+      }
+
+      document.getElementById('editProductForm').addEventListener('submit', async e => {
+        e.preventDefault();
+
+        const getTagValues = id => Array.from(document.querySelectorAll(`#${id} .tag`))
+          .map(tag => tag.dataset.value || tag.textContent.replace(' ×', '').trim());
+
+        const productData = {
+          title: document.querySelector('input[placeholder="Enter product name"]').value,
+          description: tinymce.get('productDescription').getContent(),
+          originalPrice: +document.getElementById('originalPrice').value,
+          sellingPrice: +document.getElementById('sellingPrice').value,
+          currency: document.querySelectorAll('select')[0].value,
+          category: document.getElementById('main-category').value,
+          subcategory: document.getElementById('subcategory').value,
+          colors: getTagValues('color-list'),
+          sizes: getTagValues('size-list'),
+          materials: getTagValues('material-list'),
+          tags: getTagValues('tagInput'),
+          trackInventory: document.getElementById('trackInventory').checked,
+          allowOOS: document.getElementById('allowOOS').checked,
+          barcode: document.querySelector('input[placeholder="Enter barcode"]').value,
+          sku: document.querySelector('input[placeholder="Enter SKU"]').value,
+          weight: +document.getElementById('productWeight').value,
+          weightUnit: document.querySelectorAll('select')[2].value,
+          availableQty: +document.getElementById('availableQty').value,
+          onHandQty: +document.getElementById('onHandQty').value,
+          inventoryLocations: Array.from(document.querySelectorAll('#inventoryTable .row')).map(row => {
+            const name = row.querySelector('.location-name').value.trim();
+            const qty = +row.querySelector('.location-qty').value;
+            return `${name} - ${qty}`;
+          }),
+
+          vendor: document.getElementById('vendor').value,
+          status: document.getElementById('status').value,
+          media: uploadedMedia // existing media only
+        };
+
+        const method = isEditMode ? 'PUT' : 'POST';
+        const url = isEditMode ? `${endpointBase}/${productId}` : endpointBase;
+
+        try {
+          const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData)
+          });
+          if (res.ok) {
+            window.location.href = 'products.html';
+          } else throw new Error('Save failed');
+        } catch (err) {
+          console.error(err);
+          alert('Error saving product.');
+        }
+      });
+    });
+
+    // Helpers
+    function createTag(value, containerId) {
+      if (!value) return;
+      const span = document.createElement("span");
+      span.className = "tag";
+      span.dataset.value = value;
+      span.textContent = value;
+
+      const close = document.createElement("span");
+      close.textContent = " ×";
+      close.style.marginLeft = "8px";
+      close.style.cursor = "pointer";
+      close.onclick = () => span.remove();
+      span.appendChild(close);
+
+      document.getElementById(containerId).appendChild(span);
+    }
+
+    function addColor() {
+    const color = document.querySelector(".color-select").value;
+    if (!color) return;
+
+    // Create the tag element
+    const span = document.createElement("span");
+    span.className = "tag";
+    span.dataset.value = color;
+    span.textContent = color;
+    span.style.backgroundColor = color.toLowerCase();  // Set background to selected color
+    span.style.color = (color.toLowerCase() === "yellow" || color.toLowerCase() === "white") ? "#000" : "#fff"; // Handle contrast
+
+    // Add close button
+    const close = document.createElement("span");
+    close.textContent = " ×";
+    close.style.marginLeft = "8px";
+    close.style.cursor = "pointer";
+    close.onclick = () => span.remove();
+
+    span.appendChild(close);
+    document.getElementById("color-list").appendChild(span);
+  }
+
+    function addSize() {
+      const size = document.querySelector(".variant-select").value;
+      if (size) createTag(size, "size-list");
+    }
+
+    function addMaterial() {
+      const material = document.querySelector(".material-select").value;
+      if (material) createTag(material, "material-list");
+    }
+
+    document.getElementById("trackInventory").addEventListener("change", () => {
+      const invBox = document.getElementById("inventoryDetails");
+      invBox.style.display = document.getElementById("trackInventory").checked ? "block" : "none";
+    });
+
+    document.getElementById("tagTextBox").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const tagVal = e.target.value.trim();
+        if (tagVal) {
+          createTag(tagVal, "tagInput");
+          e.target.value = "";
+        }
+      }
+    });
+  </script>
+</body>
+</html>

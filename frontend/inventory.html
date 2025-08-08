@@ -16,6 +16,7 @@
     body {
       background: #f4f6f8;
       display: flex;
+      overflow-x: auto;
     }
 
     .sidebar {
@@ -38,7 +39,6 @@
     .sidebar ul {
       list-style: none;
       padding: 0;
-      margin: 0;
     }
 
     .sidebar li {
@@ -74,10 +74,11 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .header h1 {
-      margin: 0;
       font-size: 24px;
       color: #333;
     }
@@ -89,27 +90,44 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 14px;
+      white-space: nowrap;
     }
 
     .add-btn:hover {
       background: #1e40af;
     }
 
-    .search input {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 250px;
+    .search {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 20px;
     }
 
-    table {
+    .search input,
+    .search select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
       width: 100%;
+    }
+
+    table {
+      min-width: 1200px;
       border-collapse: collapse;
       background: white;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      white-space: nowrap;
     }
 
     th, td {
@@ -123,21 +141,24 @@
       font-weight: 600;
     }
 
-    td {
-      font-size: 14px;
-      color: #333;
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    input.stock-input {
-      width: 60px;
-      padding: 4px;
-      font-size: 14px;
+    .product-info img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
     }
 
     .status-badge {
       padding: 4px 10px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: bold;
       display: inline-block;
     }
@@ -155,6 +176,52 @@
     .status-out {
       background: #fee2e2;
       color: #991b1b;
+    }
+
+    .color-tag {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-right: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .view-btn, .edit-btn, .delete-btn {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .view-btn { background: #0ea5e9; }
+    .edit-btn { background: #28a745; }
+    .delete-btn { background: #dc3545; }
+
+    .view-btn:hover { background: #0284c7; }
+    .edit-btn:hover { background: #218838; }
+    .delete-btn:hover { background: #b02a37; }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 20px;
+        width: 100%;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+      }
     }
   </style>
 </head>
@@ -188,179 +255,153 @@
   <div class="main">
     <div class="header">
       <h1>Inventory</h1>
-    <a href="edit-inventory.html" class="add-btn" style="text-decoration: none;">
-  <i class="fas fa-plus"></i> Add Inventory
-</a>
+      <a href="add-product.html" class="add-btn"><i class="fas fa-plus"></i> Add Inventory</a>
     </div>
 
     <div class="search">
-      <input type="text" placeholder="Search inventory...">
-<select id="statusFilter" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; margin-left: 20px;">
-  <option value="all">All</option>
-  <option value="in">In Stock</option>
-  <option value="low">Low Stock</option>
-  <option value="out">Out of Stock</option>
-</select>
-</div>
+      <input type="text" placeholder="Search inventory..." id="searchInput">
+      <select id="statusFilter">
+        <option value="all">All</option>
+        <option value="in">In Stock</option>
+        <option value="low">Low Stock</option>
+        <option value="out">Out of Stock</option>
+      </select>
+    </div>
+
     <table id="inventoryTable">
       <thead>
         <tr>
           <th>Product</th>
+          <th>Colors</th>
           <th>SKU</th>
-          <th>Stock</th>
+          <th>Available</th>
+          <th>On Hand</th>
           <th>Status</th>
-          <th>Location</th>
+          <th>Locations</th>
+          <th>Actions</th>
         </tr>
       </thead>
-      <!-- Only the updated <tbody> and JS part shown, rest of HTML remains same -->
-
-<tbody>
-  <tr>
-    <td>Blue Hoodie</td>
-    <td>#HD001</td>
-    <td><input type="number" value="120" class="stock-input" onchange="updateStatus(this)"></td>
-    <td class="status-cell"></td>
-    <td>
-  <select class="location-select" onchange="handleLocationChange(this)">
-    <option>Warehouse A</option>
-    <option>Warehouse B</option>
-    <option>Warehouse C</option>
-    <option value="custom"> Custom...</option>
-  </select>
-</td>
-  </tr>
-  <tr>
-    <td>White Sneakers</td>
-    <td>#SN102</td>
-    <td><input type="number" value="8" class="stock-input" onchange="updateStatus(this)"></td>
-    <td class="status-cell"></td>
-    <td>
-  <select class="location-select" onchange="handleLocationChange(this)">
-    <option>Warehouse A</option>
-    <option>Warehouse B</option>
-    <option>Warehouse C</option>
-    <option value="custom"> Custom...</option>
-  </select>
-</td>
-  </tr>
-  <tr>
-    <td>Graphic T-shirt</td>
-    <td>#TS203</td>
-    <td><input type="number" value="58" class="stock-input" onchange="updateStatus(this)"></td>
-    <td class="status-cell"></td>
-    <td>
-  <select class="location-select" onchange="handleLocationChange(this)">
-    <option>Warehouse A</option>
-    <option>Warehouse B</option>
-    <option>Warehouse C</option>
-    <option value="custom"> Custom...</option>
-  </select>
-</td>
-  </tr>
-  <tr>
-    <td>Sports Shorts</td>
-    <td>#SS301</td>
-    <td><input type="number" value="0" class="stock-input" onchange="updateStatus(this)"></td>
-    <td class="status-cell"></td>
-    <td>
-  <select class="location-select" onchange="handleLocationChange(this)">
-    <option>Warehouse A</option>
-    <option>Warehouse B</option>
-    <option>Warehouse C</option>
-    <option value="custom"> Custom...</option>
-  </select>
-</td>
-  </tr>
-</tbody>
-
+      <tbody id="inventoryBody"></tbody>
     </table>
   </div>
 
+  <!-- Modal -->
+  <div class="modal" id="viewModal">
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
   <script>
-  const store = localStorage.getItem("store_name");
-  const storeTitle = document.getElementById("storeTitle");
-  if (store && storeTitle) {
-    storeTitle.textContent = `${store} Store`;
-  }
+    const store = localStorage.getItem("store_name");
+    const storeTitle = document.getElementById("storeTitle");
+    if (store && storeTitle) storeTitle.textContent = `${store} Store`;
 
-  function updateStatus(input) {
-    const row = input.closest("tr");
-    const statusCell = row.querySelector(".status-cell");
-    const stock = parseInt(input.value);
+    // ✅ Updated: use the same key as used in add-product.html
+    const userEmail = localStorage.getItem("signup_email");
 
-    let statusText = "";
-    let statusClass = "";
+    async function loadInventory() {
+      const res = await fetch(`/api/products?email=${encodeURIComponent(userEmail)}`);
+      const allProducts = await res.json();
+      const inventory = allProducts.filter(p => p.trackInventory);
+      const tbody = document.getElementById("inventoryBody");
+      tbody.innerHTML = "";
 
-    if (stock === 0) {
-      statusText = "Out of Stock";
-      statusClass = "status-out";
-    } else if (stock < 10) {
-      statusText = "Low Stock";
-      statusClass = "status-low";
-    } else {
-      statusText = "In Stock";
-      statusClass = "status-in";
+      inventory.forEach(item => {
+        const statusClass = getStatusClass(item.availableQty);
+        const statusText = getStatusText(item.availableQty);
+
+        const row = document.createElement("tr");
+        row.setAttribute("data-status", statusClass);
+        row.innerHTML = `
+          <td><div class="product-info">
+            <img src="${item.media?.[0] || ''}" alt="" />
+            <span>${item.title}</span>
+          </div></td>
+          <td>${(item.colors || []).map(c => `<span class="color-tag" style="background:${c}"></span>`).join('')}</td>
+          <td>${item.sku || '-'}</td>
+          <td>${item.availableQty || 0}</td>
+          <td>${item.onHandQty || 0}</td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td>${(item.inventoryLocations || []).join(', ')}</td>
+          <td class="action-buttons">
+  <button class="edit-btn" onclick="window.location.href='add-product.html?id=${item._id}'">Edit</button>
+  <button class="delete-btn" onclick="deleteProduct('${item._id}')">Delete</button>
+</td>
+
+        `;
+        tbody.appendChild(row);
+      });
     }
 
-    statusCell.innerHTML = `<span class="status-badge ${statusClass}">${statusText}</span>`;
-  }
-
-  document.querySelectorAll(".stock-input").forEach(input => updateStatus(input));
-
-  function handleLocationChange(selectElement) {
-    if (selectElement.value === "custom") {
-      const td = selectElement.parentElement;
-      const input = document.createElement("input");
-      input.type = "text";
-      input.className = "location-input";
-      input.placeholder = "Enter custom location";
-      input.value = "";
-      input.onblur = () => {
-        if (input.value.trim() !== "") {
-          td.innerHTML = "";
-          td.appendChild(input); // remain editable
-        } else {
-          td.innerHTML = `
-            <select class="location-select" onchange="handleLocationChange(this)">
-              <option>Warehouse A</option>
-              <option>Warehouse B</option>
-              <option>Warehouse C</option>
-              <option value="custom" selected> Custom...</option>
-            </select>`;
-        }
-      };
-      td.innerHTML = "";
-      td.appendChild(input);
-      input.focus();
+    function getStatusClass(qty) {
+      if (qty === 0) return "status-out";
+      if (qty < 10) return "status-low";
+      return "status-in";
     }
-  }
-  // ✅ SEARCH & FILTER LOGIC
-  const searchInput = document.querySelector(".search input");
-  const statusFilter = document.getElementById("statusFilter");
-  const tableRows = document.querySelectorAll("#inventoryTable tbody tr");
 
-  searchInput.addEventListener("input", applySearchAndFilter);
-  statusFilter.addEventListener("change", applySearchAndFilter);
+    function getStatusText(qty) {
+      if (qty === 0) return "Out of Stock";
+      if (qty < 10) return "Low Stock";
+      return "In Stock";
+    }
 
-  function applySearchAndFilter() {
-    const searchValue = searchInput.value.toLowerCase();
-    const selectedStatus = statusFilter.value;
+    async function viewDetails(id) {
+      const res = await fetch(`/api/products/${id}?email=${encodeURIComponent(userEmail)}`);
+      const product = await res.json();
+      const modal = document.getElementById("viewModal");
+      const modalContent = document.getElementById("modalContent");
 
-    tableRows.forEach(row => {
-      const product = row.cells[0].textContent.toLowerCase();
-      const sku = row.cells[1].textContent.toLowerCase();
-      const rowStatus = row.getAttribute("data-status");
+      modalContent.innerHTML = `
+        <h3>${product.title}</h3>
+        <p><strong>Description:</strong> ${product.description}</p>
+        <p><strong>SKU:</strong> ${product.sku}</p>
+        <p><strong>Barcode:</strong> ${product.barcode}</p>
+        <p><strong>Weight:</strong> ${product.weight} ${product.weightUnit}</p>
+        <p><strong>Category:</strong> ${product.category} / ${product.subcategory}</p>
+        <p><strong>Vendor:</strong> ${product.vendor}</p>
+        <p><strong>Status:</strong> ${product.status}</p>
+        <p><strong>Colors:</strong> ${(product.colors || []).map(c => `<span class='color-tag' style='background:${c}'></span>`).join(' ')}</p>
+        <p><strong>Materials:</strong> ${(product.materials || []).join(', ')}</p>
+        <p><strong>Sizes:</strong> ${(product.sizes || []).join(', ')}</p>
+        <p><strong>Tags:</strong> ${(product.tags || []).join(', ')}</p>
+        <p><strong>Inventory:</strong><br>${(product.inventoryLocations || []).join('<br>')}</p>
+        <button onclick="document.getElementById('viewModal').style.display='none'">Close</button>
+      `;
 
-      const matchesSearch = product.includes(searchValue) || sku.includes(searchValue);
-      const matchesStatus = selectedStatus === "all" || selectedStatus === rowStatus;
+      modal.style.display = "flex";
+    }
 
-      if (matchesSearch && matchesStatus) {
-        row.style.display = "";
-      } else {
-        row.style.display = "none";
+    function deleteProduct(id) {
+      if (confirm("Are you sure you want to delete this product?")) {
+        fetch(`/api/products/${id}?email=${encodeURIComponent(userEmail)}`, { method: "DELETE" })
+          .then(() => loadInventory());
       }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", applySearchAndFilter);
+    document.getElementById("statusFilter").addEventListener("change", applySearchAndFilter);
+
+    function applySearchAndFilter() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const selectedStatus = document.getElementById("statusFilter").value;
+      const tableRows = document.querySelectorAll("#inventoryTable tbody tr");
+
+      tableRows.forEach(row => {
+        const product = row.querySelector(".product-info span").textContent.toLowerCase();
+        const sku = row.cells[2].textContent.toLowerCase();
+        const rowStatus = row.getAttribute("data-status");
+
+        const matchesSearch = product.includes(searchValue) || sku.includes(searchValue);
+        const matchesStatus = selectedStatus === "all" || selectedStatus === rowStatus;
+
+        row.style.display = matchesSearch && matchesStatus ? "" : "none";
+      });
+    }
+
+    window.addEventListener("click", e => {
+      if (e.target.id === "viewModal") document.getElementById("viewModal").style.display = "none";
     });
-  }
-</script>
+
+    loadInventory();
+  </script>
 </body>
 </html>

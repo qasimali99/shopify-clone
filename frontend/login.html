@@ -173,6 +173,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
           message.className = "success";
           localStorage.setItem("token", data.token);
           localStorage.setItem("full_name", data.name || "User");
+          localStorage.setItem("signup_email", email);
           setTimeout(() => {
             window.location.href = "dashboard.html";
           }, 500);

@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog Posts | Shopify Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #f4f6f8;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin: 12px 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.2s, padding-left 0.2s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.15);
+      padding-left: 16px;
+    }
+
+    .sidebar .submenu a {
+      font-size: 14px;
+      padding-left: 32px;
+      color: #e0eaff;
+    }
+
+    .main {
+      margin-left: 230px;
+      padding: 30px;
+      width: calc(100% - 230px);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .add-btn {
+      background: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .add-btn:hover {
+      background: #1e40af;
+    }
+
+    .search {
+      margin-bottom: 20px;
+    }
+
+    .search input {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+
+    .content-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .content-table th, .content-table td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .content-table th {
+      background: #f9fafb;
+      font-weight: 600;
+    }
+
+    .status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .published {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .draft {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      font-size: 14px;
+      color: #555;
+      transition: color 0.2s;
+    }
+
+    .actions button:hover {
+      color: #1a73e8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <h2 id="storeTitle">Your Store</h2>
+    <ul>
+      <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+      <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+      <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
+      <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
+      <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+      <li>
+        <a href="javascript:void(0);" class="active" onclick="toggleContentMenu()">
+          <i class="fas fa-file-alt"></i> Content
+          <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
+        </a>
+       <ul id="contentSubMenu" class="submenu" style="display: block;">
+          <li><a href="blog-post.html" class="active">📄 Blog Posts</a></li>
+          <li><a href="pages.html" >📃 Pages</a></li>
+          <li><a href="files.html">📁 Files</a></li>
+          <li><a href="navigation.html">🧱 Navigation</a></li>
+        </ul>
+      </li>
+      <li><a href="marketing.html"><i class="fas fa-bullhorn"></i> Marketing</a></li>
+      <li><a href="themes.html"><i class="fas fa-palette"></i> Store Themes</a></li>
+      <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+      <li><a href="discounts.html"><i class="fas fa-tags"></i> Discounts</a></li>
+      <li><a href="sales-channels.html"><i class="fas fa-store"></i> Sales Channels</a></li>
+    </ul>
+    <ul style="margin-top: 30px;">
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>Blog Posts</h1>
+      <button class="add-btn" onclick="window.location.href='add-blog-post.html'">
+        <i class="fas fa-plus"></i> Add Blog Post
+      </button>
+    </div>
+
+    <div class="search">
+      <input type="text" placeholder="Search blog posts..." id="searchInput" onkeyup="filterContent()" />
+    </div>
+
+    <table class="content-table" id="contentTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Author</th>
+          <th>Last Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Summer Trends 2025</td>
+          <td><span class="status published">Published</span></td>
+          <td>Admin</td>
+          <td>July 14, 2025</td>
+          <td class="actions">
+            <button onclick="viewPost(this)"><i class="fas fa-eye"></i></button>
+            <button onclick="editPost(this)"><i class="fas fa-edit"></i></button>
+            <button onclick="showDeletePopup(this)"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+        <tr>
+          <td>Behind the Scenes</td>
+          <td><span class="status draft">Draft</span></td>
+          <td>Editor</td>
+          <td>July 01, 2025</td>
+          <td class="actions">
+            <button onclick="viewPost(this)"><i class="fas fa-eye"></i></button>
+          <button onclick="editPost(this)"><i class="fas fa-edit"></i></button>
+            <button onclick="alert('Delete Post')"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+        <tr>
+          <td>New Launch Event Recap</td>
+          <td><span class="status published">Published</span></td>
+          <td>Marketing Team</td>
+          <td>June 20, 2025</td>
+        <td class="actions">
+            <button onclick="viewPost(this)"><i class="fas fa-eye"></i></button>
+            <button onclick="editPost(this)"><i class="fas fa-edit"></i></button>
+            <button onclick="alert('Delete Post')"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<div id="deletePopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:1000;">
+  <div style="background:#fff; padding:20px 30px; border-radius:8px; width:300px; max-width:90%; margin:150px auto; box-shadow:0 5px 15px rgba(0,0,0,0.3); position:relative;">
+    <h3 style="margin-bottom:10px;">Confirm Deletion</h3>
+    <p style="font-size:14px; color:#555;">Are you sure you want to delete this blog post?</p>
+    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+      <button onclick="cancelDelete()" style="padding:6px 12px; border:none; background:#ccc; border-radius:4px;">Cancel</button>
+      <button onclick="confirmDelete()" style="padding:6px 12px; border:none; background:#e11d48; color:white; border-radius:4px;">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+<div id="viewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:1000;">
+  <div style="background:#fff; padding:20px 30px; border-radius:8px; width:400px; max-width:90%; margin:100px auto; box-shadow:0 5px 15px rgba(0,0,0,0.3); position:relative;">
+    <h3 style="margin-bottom:10px;" id="viewTitle">Blog Post Title</h3>
+    <p><strong>Status:</strong> <span id="viewStatus"></span></p>
+    <p><strong>Author:</strong> <span id="viewAuthor"></span></p>
+    <p><strong>Last Updated:</strong> <span id="viewDate"></span></p>
+    <div style="margin-top:20px; text-align:right;">
+      <button onclick="closeViewModal()" style="padding:6px 12px; border:none; background:#1a73e8; color:white; border-radius:4px;">Close</button>
+    </div>
+  </div>
+</div>
+
+  <script>
+    const store = localStorage.getItem("store_name");
+    const storeTitle = document.getElementById("storeTitle");
+    if (store && storeTitle) storeTitle.textContent = `${store} Store`;
+
+    function filterContent() {
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      document.querySelectorAll("#contentTable tbody tr").forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? "" : "none";
+      });
+    }
+
+    function toggleContentMenu() {
+      const submenu = document.getElementById("contentSubMenu");
+      submenu.style.display = submenu.style.display === "none" ? "block" : "none";
+    }
+  let rowToDelete = null;
+
+  function showDeletePopup(button) {
+    rowToDelete = button.closest('tr');
+    document.getElementById('deletePopup').style.display = 'block';
+  }
+
+  function cancelDelete() {
+    rowToDelete = null;
+    document.getElementById('deletePopup').style.display = 'none';
+  }
+
+  function confirmDelete() {
+    if (rowToDelete) {
+      rowToDelete.remove();
+      rowToDelete = null;
+    }
+    document.getElementById('deletePopup').style.display = 'none';
+  }
+  function viewPost(button) {
+  const row = button.closest('tr');
+  const cells = row.querySelectorAll('td');
+
+  document.getElementById('viewTitle').textContent = cells[0].innerText;
+  document.getElementById('viewStatus').textContent = cells[1].innerText;
+  document.getElementById('viewAuthor').textContent = cells[2].innerText;
+  document.getElementById('viewDate').textContent = cells[3].innerText;
+
+  document.getElementById('viewModal').style.display = 'block';
+}
+
+function closeViewModal() {
+  document.getElementById('viewModal').style.display = 'none';
+}
+function editPost(button) {
+  const row = button.closest('tr');
+  const cells = row.querySelectorAll('td');
+
+  const postData = {
+    title: cells[0].innerText,
+    status: cells[1].innerText,
+    author: cells[2].innerText,
+    date: cells[3].innerText
+  };
+
+  localStorage.setItem("editPostData", JSON.stringify(postData));
+  window.location.href = "add-blog-post.html";
+}
+</script>
+</body>
+</html>

@@ -1,9 +1,9 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sidebar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Themes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * {
@@ -12,13 +12,10 @@
       box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
     }
-
     body {
       background: #f4f6f8;
       display: flex;
     }
-    
-
     .sidebar {
       width: 230px;
       background: #1a73e8;
@@ -30,22 +27,9 @@
       left: 0;
       overflow-y: auto;
     }
-
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 30px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sidebar li {
-      margin: 12px 0;
-    }
-
+    .sidebar h2 { font-size: 20px; margin-bottom: 30px; }
+    .sidebar ul { list-style: none; }
+    .sidebar li { margin: 12px 0; }
     .sidebar a {
       color: white;
       text-decoration: none;
@@ -57,101 +41,119 @@
       border-radius: 6px;
       transition: background 0.2s, padding-left 0.2s;
     }
-
-    .sidebar a:hover,
-    .sidebar a.active {
+    .sidebar a:hover, .sidebar a.active {
       background: rgba(255, 255, 255, 0.15);
       padding-left: 16px;
     }
-
-    .main {
-      margin-left: 230px;
-      padding: 30px;
-      width: calc(100% - 230px);
+    .sidebar .submenu a {
+      font-size: 14px;
+      padding-left: 32px;
+      color: #e0eaff;
     }
-
-    .header {
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+      width: 100%;
+    }
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
-
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
-      color: #333;
+    .top-bar input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 250px;
     }
-
-    .add-btn {
-      background: #2563eb;
+    .top-bar .actions button {
+      background: #1a73e8;
       color: white;
-      padding: 8px 16px;
       border: none;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .primary-theme {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      display: flex;
+      overflow: hidden;
+    }
+    .primary-theme img {
+      width: 400px;
+      object-fit: cover;
+    }
+    .primary-theme .details {
+      padding: 20px;
+      flex-grow: 1;
+    }
+    .primary-theme .details h2 {
+      margin-bottom: 10px;
+    }
+    .primary-theme .details p {
+      color: #555;
+    }
+    .primary-theme .details button {
+      margin-top: 12px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 14px;
       border-radius: 6px;
       cursor: pointer;
     }
-
-    .add-btn:hover {
-      background: #1e40af;
-    }
-
-    .search input {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 250px;
-      margin-bottom: 20px;
-    }
-
-    .market-grid {
+    .themes-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 20px;
     }
-
-    .market-card {
+    .theme-card {
       background: white;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      transition: 0.2s ease;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
-
-    .market-card:hover {
-      transform: translateY(-3px);
+    .theme-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
     }
-
-    .market-card h3 {
-      margin: 0 0 8px;
+    .theme-card .details {
+      padding: 15px;
     }
-
-    .market-card .status {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: inline-block;
+    .theme-card .details h3 {
       margin-bottom: 10px;
+      font-size: 18px;
     }
-
-    .active {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .inactive {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .currency {
-      color: #555;
+    .theme-card .details p {
       font-size: 14px;
+      color: #666;
+    }
+    .theme-card .details button {
+      margin-top: 8px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .theme-card .details button:hover {
+      background: #1662c4;
     }
   </style>
 </head>
 <body>
-
   <div class="sidebar" id="sidebar">
     <h2 id="storeTitle">Your Store</h2>
     <ul>
@@ -161,9 +163,17 @@
       <li><a href="inventory.html"><i class="fas fa-warehouse"></i> Inventory</a></li>
       <li><a href="collections.html"><i class="fas fa-th"></i> Collections</a></li>
       <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
-      <li><a href="content.html"><i class="fas fa-file-alt"></i> Content</a></li>
+      <li>
+        <a href="javascript:void(0);" onclick="toggleContentMenu()">
+          <i class="fas fa-file-alt"></i> Content <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
+        </a>
+        <ul id="contentSubMenu" class="submenu" style="display: none;">
+          <li><a href="blog-post.html">📄 Blog Posts</a></li>
+          <li><a href="pages.html">📃 Pages</a></li>
+        </ul>
+      </li>
       <li><a href="marketing.html"><i class="fas fa-bullhorn"></i> Marketing</a></li>
-       <li><a href="themes.html" class="active"><i class="fas fa-palette"></i> Store Themes</a></li>
+      <li><a href="themes.html" class="active"><i class="fas fa-palette"></i> Store Themes</a></li>
       <li><a href="markets.html"><i class="fas fa-globe"></i> Markets</a></li>
       <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
       <li><a href="discounts.html"><i class="fas fa-tags"></i> Discounts</a></li>
@@ -174,75 +184,143 @@
       <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
   </div>
-<div class="main">
-  <div class="header">
-    <h1>Store Themes / Assets</h1>
-    <button class="add-btn" onclick="refreshAssets()">⟳ Refresh</button>
-  </div>
 
-  <div class="search">
-    <input type="text" placeholder="Search assets..." oninput="filterAssets(this.value)" />
-  </div>
+  <div class="main-content">
+    <div class="top-bar">
+      <input type="text" placeholder="Search themes..." id="searchInput" onkeyup="filterThemes()">
+      <div class="actions">
+        <button onclick="viewStore()">View Store</button>
+        <button onclick="document.getElementById('importInput').click()">Import Theme</button>
+        <input type="file" id="importInput" accept=".zip" style="display:none" />
+      </div>
+    </div>
 
-  <div class="market-grid" id="assetsGrid">
-    <!-- Files will be loaded here -->
+    <div class="primary-theme" id="currentThemeSection"></div>
+
+    <h2>Available Themes</h2>
+    <div class="themes-grid" id="themesGrid"></div>
   </div>
-</div>
 
   <script>
-    const store = localStorage.getItem("store_name");
-    const storeTitle = document.getElementById("storeTitle");
-    if (store && storeTitle) {
-      storeTitle.textContent = `${store} Store`;
+  const themes = [
+    {
+      name: "Stylish Main",
+      folder: "stylish-main",
+      image: "themes/stylish-main/images/preview.png",
+      description: "Elegant layout with stylish UI components."
+    },
+    {
+      name: "Old Skool",
+      folder: "oldskool-html-bootstrap-main",
+      image: "themes/oldskool-html-bootstrap-main/dist/assets/images/preview/preview 3.png",
+      description: "Premium ecommerce layout with full dashboard."
+    },
+    {
+      name: "Ecommerce Master",
+      folder: "Ecommerce-master",
+      image: "themes/Ecommerce-master/images/preview.png",
+      description: "Classic design theme with smooth UX."
     }
-  
-  async function loadAssets() {
-    try {
-      const res = await fetch('/api/theme-assets');
-      const data = await res.json();
-      if (!Array.isArray(data.files)) return;
+  ];
 
-      const grid = document.getElementById('assetsGrid');
-      grid.innerHTML = ''; // clear
+  async function getActiveTheme() {
+  const email = localStorage.getItem("signup_email"); // use this consistently
+  const res = await fetch(`/api/active-theme?email=${email}`);
+  const data = await res.json();
+  return data.theme || "stylish-main"; // fallback if none
+}
 
-      data.files.forEach(file => {
-        const card = document.createElement('div');
-        card.className = 'market-card';
+  async function setActiveTheme(theme) {
+  const email = localStorage.getItem("signup_email");
+  await fetch("/api/active-theme", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, theme }),
+  });
 
-        card.innerHTML = `
-          <h3>${file}</h3>
-          <div class="currency">${getFileType(file)}</div>
-          <span class="status ${file.endsWith('.css') || file.endsWith('.js') ? 'active' : 'inactive'}">${file.endsWith('.css') || file.endsWith('.js') ? 'Theme File' : 'Other'}</span>
-        `;
+  // Re-render current theme section
+  renderCurrentTheme();
+}
 
-        grid.appendChild(card);
-      });
-    } catch (err) {
-      console.error('Error loading assets:', err);
-    }
-  }
 
-  function getFileType(file) {
-    if (file.endsWith('.css')) return 'CSS File';
-    if (file.endsWith('.js')) return 'JavaScript File';
-    if (file.endsWith('.svg')) return 'SVG Icon';
-    if (file.endsWith('.gif')) return 'GIF Image';
-    return 'Other';
-  }
+  async function viewStore() {
+  const active = await getActiveTheme(); // ✅ Wait for the theme
+  const path = active === "oldskool-html-bootstrap-main"
+    ? `themes/${active}/dist/index.html`
+    : `themes/${active}/index.html`;
+  window.open(path, "_blank");
+}
 
-  function filterAssets(query) {
-    const cards = document.querySelectorAll('.market-card');
-    cards.forEach(card => {
-      card.style.display = card.textContent.toLowerCase().includes(query.toLowerCase()) ? 'block' : 'none';
+async function customizeTheme() {
+  const active = await getActiveTheme(); // ✅ Wait for the theme
+  window.open(`theme-editor.html?theme=${active}`, "_blank");
+}
+
+  async function renderCurrentTheme() {
+  const active = await getActiveTheme();
+  const current = themes.find(t => t.folder === active);
+  const section = document.getElementById("currentThemeSection");
+  if (!current) return;
+
+  const previewPath = current.folder === "oldskool-html-bootstrap-main"
+    ? `themes/${current.folder}/dist/index.html`
+    : `themes/${current.folder}/index.html`;
+
+  section.innerHTML = `
+    <img src="${current.image}" alt="Current Theme">
+    <div class="details">
+      <h2>${current.name}</h2>
+      <p>This is your current theme. You can customize it to fit your brand.</p>
+      <button onclick="customizeTheme()">Customize</button>
+    </div>
+  `;
+}
+
+async function renderThemes(filter = "") {
+  const grid = document.getElementById("themesGrid");
+  const active = await getActiveTheme();
+  grid.innerHTML = "";
+  themes
+    .filter(theme => theme.name.toLowerCase().includes(filter.toLowerCase()))
+    .forEach(theme => {
+      const isActive = theme.folder === active;
+      const previewPath = theme.folder === "oldskool-html-bootstrap-main"
+        ? `themes/${theme.folder}/dist/index.html`
+        : `themes/${theme.folder}/index.html`;
+
+      const card = document.createElement("div");
+      card.className = "theme-card";
+      card.innerHTML = `
+        <img src="${theme.image}" alt="${theme.name}">
+        <div class="details">
+          <h3>${theme.name}</h3>
+          <p>${theme.description}</p>
+          <a href="${previewPath}" target="_blank"><button>Live Preview</button></a>
+          ${!isActive ? `<button onclick="setActiveTheme('${theme.folder}')">Make Active</button>` : ''}
+        </div>
+      `;
+      grid.appendChild(card);
     });
+}
+
+  function filterThemes() {
+    const value = document.getElementById("searchInput").value;
+    renderThemes(value);
   }
 
-  function refreshAssets() {
-    loadAssets();
+  function toggleContentMenu() {
+    const submenu = document.getElementById("contentSubMenu");
+    submenu.style.display = submenu.style.display === "none" ? "block" : "none";
   }
 
-  // Load on page start
-  window.addEventListener('DOMContentLoaded', loadAssets);
+  const store = localStorage.getItem("store_name");
+  const storeTitle = document.getElementById("storeTitle");
+  if (store && storeTitle) storeTitle.textContent = `${store} Store`;
+
+  renderCurrentTheme();
+  renderThemes();
 </script>
 </body>
 </html>

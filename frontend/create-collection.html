@@ -2,270 +2,431 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Collection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <script src="https://cdn.tiny.cloud/1/hao1w2wju24khcwvqslwjdjhdsdbn9tgfh9uxu904dxhgzxo/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f7f9fb;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      padding: 30px;
     }
     .container {
       max-width: 900px;
+      background: white;
       margin: auto;
-      background: #fff;
-      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    h2, h3 {
-      text-align: center;
-      margin-bottom: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     label {
-      font-weight: bold;
+      font-weight: 600;
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
     input, textarea, select {
       width: 100%;
       padding: 10px;
-      border-radius: 6px;
       border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
     }
-    .preview {
+    .error {
+      color: red;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    #selectedProducts {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
     }
-    .preview img, .preview video {
-      max-width: 120px;
-      border-radius: 6px;
-    }
-    button {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .search-section {
-      margin-top: 30px;
-      border-top: 1px solid #ccc;
-      padding-top: 20px;
-    }
-    .search-bar {
+    .tag {
+      background: #e0f0ff;
+      padding: 6px 12px;
+      border-radius: 20px;
       display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 6px;
+      cursor: grab;
     }
-    .search-bar input {
-      flex: 1;
-      padding: 10px;
+    .tag span {
+      cursor: pointer;
+      color: #007bff;
+      font-weight: bold;
     }
-    .browse-results {
-      margin-top: 15px;
-      max-height: 200px;
-      overflow-y: auto;
+    .seo-preview {
+      background: #f9f9f9;
+      padding: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      padding: 10px;
-      background: #f1f1f1;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .seo-preview .title {
+      color: #1a0dab;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .seo-preview .url {
+      color: #006621;
+      margin-bottom: 4px;
+    }
+    .seo-preview .desc {
+      color: #545454;
     }
     .browse-item {
-      padding: 8px;
-      background: #fff;
-      margin-bottom: 8px;
+      padding: 10px;
+      border: 1px solid #ddd;
       border-radius: 6px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    .browse-item button {
+      background: #007bff;
+      border: none;
+      padding: 6px 10px;
+      color: white;
+      border-radius: 4px;
       cursor: pointer;
     }
-    .browse-item:hover {
-      background-color: #e9f3ff;
+    .save-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      font-size: 16px;
     }
+    .image-preview {
+      width: 150px;
+      height: 150px;
+      border: 2px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .image-preview img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  
+#browseResults {
+  max-height: 180px;      /* 👈 Adjusted height */
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+#browseResults::-webkit-scrollbar {
+  width: 6px;
+}
+#browseResults::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+#browseResults:hover::-webkit-scrollbar-thumb {
+  background: #999;
+}
+
+/* Hover effect for Save button */
+.save-btn:hover {
+  background-color: #0056d2;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for product Select buttons */
+.browse-item button:hover {
+  background-color: #0056d2;
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: hover effect for remove (×) inside selected product tags */
+.tag span:hover {
+  color: red;
+  transition: color 0.3s ease;
+}
+
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Create Collection</h2>
-
+    <h2 id="pageTitle">Create Collection</h2>
     <form id="collectionForm">
       <div class="form-group">
         <label>Collection Title</label>
-        <input type="text" name="title" required />
+        <input type="text" id="title" required />
+        <div class="error" id="error-title"></div>
       </div>
 
       <div class="form-group">
         <label>Description</label>
-        <textarea name="description" rows="4"></textarea>
+        <textarea id="description"></textarea>
       </div>
 
       <div class="form-group">
         <label>Status</label>
-        <select name="status" id="status">
+        <select id="status">
           <option value="active">Active</option>
           <option value="draft">Draft</option>
         </select>
       </div>
+
+      <div class="form-group">
+        <label>Upload Cover Image</label>
+        <input type="file" id="coverImage" accept="image/*" />
+        <div class="image-preview" id="imagePreview">No Image</div>
+      </div>
+
+      <div class="form-group">
+        <label>Search Product</label>
+        <input type="text" id="productSearch" placeholder="Search products..." />
+        <div id="browseResults"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Selected Products (Drag to reorder)</label>
+        <div id="selectedProducts"></div>
+      </div>
+
+      <div class="form-group">
+        <label>SEO Title</label>
+        <input type="text" id="seoTitle" maxlength="70" />
+      </div>
+      <div class="form-group">
+        <label>SEO Description</label>
+        <textarea id="seoDesc" maxlength="160"></textarea>
+      </div>
+      <div class="form-group">
+        <label>URL Handle</label>
+        <input type="text" id="seoHandle" />
+      </div>
+
+      <div class="form-group">
+        <label>SEO Preview</label>
+        <div class="seo-preview">
+          <div class="title" id="previewTitle">Your Title</div>
+          <div class="url" id="previewURL">yourstore.com/collections/handle</div>
+          <div class="desc" id="previewDesc">Meta description here...</div>
+        </div>
+      </div>
+
+      <button type="submit" class="save-btn">Save Collection</button>
     </form>
-
-    <!-- Product Search / Browse Section -->
-    <div class="search-section">
-      <h3>Browse Existing Products</h3>
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search for a product..." />
-      </div>
-      <div class="browse-results" id="browseResults">
-        <div class="browse-item">Product A <button type="button" onclick="selectProduct('Product A')">Select</button></div>
-        <div class="browse-item">Product B <button type="button" onclick="selectProduct('Product B')">Select</button></div>
-        <div class="browse-item">Product C <button type="button" onclick="selectProduct('Product C')">Select</button></div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Selected Products:</label>
-      <div id="selectedProducts" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
-    </div>
-
-    <!-- SEO Preview Section -->
-    <div class="form-group" style="margin-top: 30px;">
-      <label><strong>Search engine listing preview</strong></label>
-      <div style="background: #f9fafb; padding: 15px; border: 1px solid #ccc; border-radius: 6px;">
-        <p style="color: #1a0dab; font-size: 16px;" id="previewTitle">Your product title here</p>
-        <p style="color: #006621;" id="previewURL">yourstore.com/products/your-product</p>
-        <p style="color: #545454;" id="previewDesc">Write a short description for this product...</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Page title</label>
-      <input type="text" id="metaTitle" name="metaTitle" maxlength="70" placeholder="Page title for search engines" />
-    </div>
-
-    <div class="form-group">
-      <label>Meta description</label>
-      <textarea id="metaDesc" name="metaDesc" rows="3" maxlength="160" placeholder="Description for search engine result..."></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>URL handle</label>
-      <input type="text" id="urlHandle" name="urlHandle" placeholder="e.g. your-product-title" />
-    </div>
-
-    <!-- Save Button -->
-    <div class="form-group" style="margin-top: 30px; text-align: center;">
-      <button type="button" onclick="saveCollection()">Save Collection</button>
-    </div>
   </div>
 
-  <script>
-    const selectedSet = new Set();
+ <script>
+  let selectedProducts = [];
+  let allProducts = []; // ✅ store all available products
+  const urlParams = new URLSearchParams(window.location.search);
+  const collectionId = urlParams.get("id");
+  const isEditMode = !!collectionId;
+  const userEmail = localStorage.getItem("signup_email");
 
-    function selectProduct(name) {
-      if (selectedSet.has(name)) return;
+  async function loadProducts() {
+    try {
+      const res = await fetch(`/api/products?email=${userEmail}`);
+      const data = await res.json();
+      allProducts = data; // ✅ save globally
+      renderProductList(data);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+    }
+  }
 
-      selectedSet.add(name);
-      const container = document.getElementById("selectedProducts");
-      const tag = document.createElement("div");
-      tag.textContent = name;
-      tag.style.cssText = "background:#e0f0ff; padding:6px 10px; border-radius:20px; display:flex; align-items:center; gap:6px;";
+  function renderProductList(products) {
+    const browseContainer = document.getElementById("browseResults");
+    browseContainer.innerHTML = "";
 
-      const removeBtn = document.createElement("span");
-      removeBtn.textContent = "×";
-      removeBtn.style.cssText = "cursor:pointer; color:#007bff; font-weight:bold;";
-      removeBtn.onclick = () => {
-        selectedSet.delete(name);
-        tag.remove();
+    products.forEach(p => {
+      const item = document.createElement("div");
+      item.className = "browse-item";
+      item.innerHTML = `
+        ${p.title}
+        <button type="button">Select</button>
+      `;
+      item.querySelector("button").onclick = () => selectProduct(p.title);
+      browseContainer.appendChild(item);
+    });
+  }
+
+  function selectProduct(name) {
+    if (selectedProducts.includes(name)) return;
+
+    selectedProducts.push(name);
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.setAttribute("draggable", true);
+    tag.innerHTML = `${name} <span>&times;</span>`;
+    tag.querySelector("span").onclick = () => {
+      tag.remove();
+      selectedProducts = selectedProducts.filter(p => p !== name);
+    };
+    document.getElementById("selectedProducts").appendChild(tag);
+  }
+
+  // Drag & drop reorder
+  const selectedContainer = document.getElementById("selectedProducts");
+  let dragged;
+  selectedContainer.addEventListener("dragstart", e => dragged = e.target);
+  selectedContainer.addEventListener("dragover", e => {
+    e.preventDefault();
+    const target = e.target.closest(".tag");
+    if (target && target !== dragged) {
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientX - rect.left) / (rect.right - rect.left) > 0.5;
+      selectedContainer.insertBefore(dragged, next ? target.nextSibling : target);
+    }
+  });
+
+  // Live Search
+  document.getElementById("productSearch").addEventListener("input", function () {
+    const keyword = this.value.toLowerCase();
+    document.querySelectorAll(".browse-item").forEach(item => {
+      const match = item.textContent.toLowerCase().includes(keyword);
+      item.style.display = match ? "flex" : "none";
+    });
+  });
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    await loadProducts(); // ✅ fetch products before prefill
+
+    if (isEditMode) {
+      document.getElementById("pageTitle").textContent = "Edit Collection";
+      document.querySelector(".save-btn").textContent = "Update Collection";
+
+      try {
+        const res = await fetch(`/api/collections/${collectionId}?email=${userEmail}`);
+        const data = await res.json();
+
+        document.getElementById("title").value = data.title || "";
+        tinymce.get("description").setContent(data.description || "");
+        document.getElementById("status").value = data.status || "draft";
+        document.getElementById("seoTitle").value = data.seo?.title || "";
+        document.getElementById("seoDesc").value = data.seo?.desc || "";
+        document.getElementById("seoHandle").value = data.seo?.handle || "";
+
+        document.getElementById("previewTitle").textContent = data.seo?.title || "Your Title";
+        document.getElementById("previewDesc").textContent = data.seo?.desc || "Meta description here...";
+        document.getElementById("previewURL").textContent = `yourstore.com/collections/${data.seo?.handle || 'handle'}`;
+
+        selectedProducts = data.products || [];
+
+        // ✅ prefill only if product exists in the fetched list
+        selectedProducts.forEach(name => {
+          const match = allProducts.find(p => p.title === name);
+          if (match) selectProduct(name);
+        });
+
+        if (data.coverImage) {
+          const img = document.createElement("img");
+          img.src = data.coverImage;
+          const preview = document.getElementById("imagePreview");
+          preview.innerHTML = "";
+          preview.appendChild(img);
+        }
+      } catch (err) {
+        console.error("Error loading collection:", err);
+      }
+    }
+  });
+
+  // SEO preview updates
+  document.getElementById("seoTitle").addEventListener("input", function () {
+    document.getElementById("previewTitle").textContent = this.value || "Your Title";
+  });
+  document.getElementById("seoDesc").addEventListener("input", function () {
+    document.getElementById("previewDesc").textContent = this.value || "Meta description here...";
+  });
+  document.getElementById("seoHandle").addEventListener("input", function () {
+    const handle = this.value.trim() || "handle";
+    document.getElementById("previewURL").textContent = `yourstore.com/collections/${handle}`;
+  });
+
+  // Initialize TinyMCE
+  tinymce.init({
+    selector: "#description",
+    plugins: "image media link code lists table advlist",
+    toolbar: "undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | image media link | code",
+    height: 300,
+    branding: false,
+  });
+
+  document.getElementById("collectionForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const title = document.getElementById("title").value.trim();
+    const description = tinymce.get("description").getContent();
+    const status = document.getElementById("status").value;
+    const seoTitle = document.getElementById("seoTitle").value.trim();
+    const seoDesc = document.getElementById("seoDesc").value.trim();
+    const seoHandle = document.getElementById("seoHandle").value.trim();
+    const selected = selectedProducts;
+    const email = localStorage.getItem("signup_email");
+    const file = document.getElementById("coverImage").files[0];
+
+    const saveCollection = async (base64Image = "") => {
+      const collection = {
+        email,
+        title,
+        description,
+        status,
+        seo: {
+          title: seoTitle,
+          desc: seoDesc,
+          handle: seoHandle,
+        },
+        coverImage: base64Image,
+        products: selected,
       };
 
-      tag.appendChild(removeBtn);
-      container.appendChild(tag);
-    }
-
-    document.getElementById('searchInput').addEventListener('input', function () {
-      const filter = this.value.toLowerCase();
-      const items = document.querySelectorAll('.browse-item');
-      items.forEach(item => {
-        item.style.display = item.textContent.toLowerCase().includes(filter) ? 'flex' : 'none';
-      });
-    });
-
-    document.querySelector('input[name="title"]').addEventListener("input", function () {
-      const val = this.value.trim();
-      document.getElementById("previewTitle").textContent = val || "Your product title here";
-      document.getElementById("urlHandle").value = val.toLowerCase().replace(/\s+/g, '-');
-      document.getElementById("previewURL").textContent = `yourstore.com/products/${document.getElementById("urlHandle").value}`;
-    });
-
-    document.getElementById("metaTitle").addEventListener("input", function () {
-      document.getElementById("previewTitle").textContent = this.value || "Your product title here";
-    });
-
-    document.getElementById("metaDesc").addEventListener("input", function () {
-      document.getElementById("previewDesc").textContent = this.value || "Write a short description for this product...";
-    });
-
-    document.getElementById("urlHandle").addEventListener("input", function () {
-      document.getElementById("previewURL").textContent = `yourstore.com/products/${this.value}`;
-    });
-
-    function saveCollection() {
-      // Simulate save and redirect
-      window.location.href = "collections.html";
-    }
-
-    // Auto-fill from dummy collection data if ID is in URL
-    window.addEventListener("DOMContentLoaded", () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const collectionId = urlParams.get("id");
-
-      if (collectionId) {
-        const dummyData = {
-          collection123: {
-            title: "Summer Sale",
-            description: "Seasonal discounts on summer products.",
-            metaTitle: "Summer Sale Collection",
-            metaDesc: "Save big on summer styles!",
-            urlHandle: "summer-sale",
-            products: ["Product A", "Product B"],
-            status: "active"
+      try {
+        const res = await fetch(
+          isEditMode ? `/api/collections/${collectionId}?email=${email}` : "/api/collections",
+          {
+            method: isEditMode ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(collection),
           }
-        };
+        );
 
-        const data = dummyData[collectionId];
-        if (data) {
-          document.querySelector('input[name="title"]').value = data.title;
-          document.querySelector('textarea[name="description"]').value = data.description;
-          document.getElementById("metaTitle").value = data.metaTitle;
-          document.getElementById("metaDesc").value = data.metaDesc;
-          document.getElementById("urlHandle").value = data.urlHandle;
-          document.getElementById("status").value = data.status;
-
-          document.getElementById("metaTitle").dispatchEvent(new Event("input"));
-          document.getElementById("metaDesc").dispatchEvent(new Event("input"));
-          document.getElementById("urlHandle").dispatchEvent(new Event("input"));
-
-          const items = document.querySelectorAll(".browse-item");
-          items.forEach(item => {
-            const name = item.textContent.trim();
-            if (data.products.includes(name)) {
-              item.style.background = "#d0ebff";
-              selectProduct(name);
-            }
-          });
+        if (res.ok) {
+          alert("Collection saved successfully!");
+          window.location.href = "collections.html";
+        } else {
+          alert("Error saving collection.");
         }
+      } catch (err) {
+        console.error(err);
+        alert("Failed to save.");
       }
-    });
-  </script>
+    };
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        saveCollection(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      saveCollection(); // no image
+    }
+  });
+</script>
+
 </body>
-</html>
+</html> 

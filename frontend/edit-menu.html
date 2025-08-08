@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #f4f6f8;
+      height: 100vh;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+    }
+    .main {
+      flex: 1;
+      padding: 40px;
+      background: #fff;
+    }
+    .main h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .menu-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .menu-item > .item-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .menu-item input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      flex: 1;
+    }
+    .delete {
+      background: none;
+      border: none;
+      color: #d33;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .add-sub {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #0077cc;
+      cursor: pointer;
+    }
+    .sub-items {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+    .sub-items .menu-item {
+      background: #eef2f6;
+    }
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .actions button {
+      padding: 10px 20px;
+      border: none;
+      background: #000;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .actions button:hover {
+      background: #333;
+    }
+    .add-link {
+      margin-top: 20px;
+      color: #0077cc;
+      background: none;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .add-link:hover {
+      text-decoration: underline;
+    }
+    .preview {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+    .preview h2 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    .nav-preview ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .nav-preview li {
+      padding: 4px 0;
+    }
+    .nav-preview ul ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <h1 id="menu-title">Edit Menu</h1>
+
+    <div id="menu-items"></div>
+    <button class="add-link" onclick="addMenuItem()">+ Add menu item</button>
+
+    <div class="actions">
+      <button onclick="saveMenu()">Save changes</button>
+    </div>
+
+    <div class="preview">
+      <h2>Live Navigation Preview</h2>
+      <div class="nav-preview" id="livePreview"></div>
+    </div>
+  </div>
+
+  <script>
+    const menuName = new URLSearchParams(window.location.search).get("menu") || "Main menu";
+    document.getElementById("menu-title").textContent = `Edit "${menuName}"`;
+
+    let menuItems = JSON.parse(localStorage.getItem(`menu-${menuName}`)) || [
+      { name: "Home", link: "/", children: [] },
+      { name: "Catalog", link: "/collections/all", children: [
+        { name: "Men", link: "/collections/men" },
+        { name: "Women", link: "/collections/women" }
+      ] }
+    ];
+// If no items exist, pre-fill with 2-3 blank inputs
+if (menuItems.length === 0) {
+  menuItems = [
+    { name: "", link: "", children: [] },
+    { name: "", link: "", children: [] },
+    { name: "", link: "", children: [] }
+  ];
+}
+
+    const container = document.getElementById("menu-items");
+    const preview = document.getElementById("livePreview");
+
+    function renderMenuItems() {
+      container.innerHTML = "";
+      menuItems.forEach((item, index) => {
+        container.appendChild(createMenuItem(item, index, menuItems));
+      });
+      renderPreview();
+    }
+
+    function createMenuItem(item, index, parentArray) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "menu-item";
+      wrapper.draggable = true;
+
+      const header = document.createElement("div");
+      header.className = "item-header";
+
+      const nameInput = document.createElement("input");
+      nameInput.placeholder = "Name";
+      nameInput.value = item.name;
+      nameInput.oninput = () => {
+  item.name = nameInput.value;
+  renderPreview();
+};
+
+      const linkInput = document.createElement("input");
+      linkInput.placeholder = "Link";
+      linkInput.value = item.link;
+linkInput.oninput = () => {
+  item.link = linkInput.value;
+  renderPreview();
+};
+
+
+      const subBtn = document.createElement("button");
+      subBtn.textContent = "+ Sub-item";
+      subBtn.className = "add-sub";
+      subBtn.onclick = () => {
+        item.children = item.children || [];
+        item.children.push({ name: "", link: "" });
+        renderMenuItems();
+      };
+
+      const delBtn = document.createElement("button");
+      delBtn.innerHTML = `<i class="fas fa-trash"></i>`;
+      delBtn.className = "delete";
+      delBtn.onclick = () => {
+        parentArray.splice(index, 1);
+        renderMenuItems();
+      };
+
+      header.append(nameInput, linkInput, subBtn, delBtn);
+      wrapper.appendChild(header);
+
+      if (item.children && item.children.length > 0) {
+        const subList = document.createElement("div");
+        subList.className = "sub-items";
+        item.children.forEach((child, i) => {
+          subList.appendChild(createMenuItem(child, i, item.children));
+        });
+        wrapper.appendChild(subList);
+      }
+
+      return wrapper;
+    }
+
+    function addMenuItem() {
+      menuItems.push({ name: "", link: "", children: [] });
+      renderMenuItems();
+    }
+
+    function saveMenu() {
+      localStorage.setItem(`menu-${menuName}`, JSON.stringify(menuItems));
+      window.location.href = "navigation.html"; // Redirect to navigation page after savings
+    }
+
+    function renderPreview() {
+      function renderItems(items) {
+        const ul = document.createElement("ul");
+        items.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} → ${item.link}`;
+          if (item.children && item.children.length) {
+            li.appendChild(renderItems(item.children));
+          }
+          ul.appendChild(li);
+        });
+        return ul;
+      }
+      preview.innerHTML = "";
+      preview.appendChild(renderItems(menuItems));
+    }
+
+    renderMenuItems();
+  </script>
+</body>
+</html>
