@@ -1,0 +1,44 @@
+# Ignore environment variables file inside backend folder
+/backend/.env
+
+# Ignore backend node_modules folder
+/backend/node_modules/
+
+# Ignore logs
+logs
+*.log
+npm-debug.log*
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore frontend node_modules if frontend uses Node.js
+/frontend/node_modules/
+
+# Optional: Ignore build or dist folders if any
+/dist/
+/build/
+
+# Ignore VSCode settings folder if using VSCode
+.vscode/
+
+# Ignore npm debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore IDE/editor files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore coverage reports
+coverage/
+
+# Ignore any local environment files (optional)
+.env.local
+.env.*.local
